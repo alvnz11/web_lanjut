@@ -103,19 +103,17 @@
    ```php
    $user = UserModel::findOrFail(1);
    ```
-   ![alt text](image/gambar_2_12.png)
 
-2. **Hasil penggunaan findOrFail**
-   ![alt text](image/gambar_2_13.png)
+2. **Hasil penggunaan firstOrFail**
+   ![alt text](image-6.png)
 
-3. **Implementasi metode findOrFail untuk data yang tidak ada**
+3. **Implementasi metode firstOrFail untuk data yang tidak ada**
    ```php
-   $user = UserModel::findOrFail(20);
+   $user = UserModel::where('username', 'manager-9')->firstOrFail();
    ```
-   ![alt text](image/gambar_2_14.png)
 
-4. **Hasil error dari findOrFail**
-   ![alt text](image/gambar_2_15.png)
+4. **Hasil error dari firstOrFail**
+   ![alt text](image-7.png)
 
 ### Praktikum 2.3 - Retreiving Aggregrates
 
