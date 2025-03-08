@@ -326,7 +326,6 @@
        </tbody>
    </table>
    ```
-   ![alt text](image/gambar_2_32.png)
 
 2. **Update controller untuk Read**
    ```php
@@ -336,43 +335,38 @@
        return view('user', ['data' => $data]);
    }
    ```
-   ![alt text](image/gambar_2_33.png)
 
 3. **Hasil tampilan Read**
-   ![alt text](image/gambar_2_34.png)
+
+   ![alt text](image-21.png)
 
 4. **Membuat form untuk Create pada user_tambah.blade.php**
    ```php
-   <form method="post" action="{{ url('/user/tambah_simpan') }}">
-       @csrf
-       <div class="form-group">
-           <label>Username</label>
-           <input type="text" name="username" class="form-control">
-       </div>
-       <div class="form-group">
-           <label>Nama</label>
-           <input type="text" name="nama" class="form-control">
-       </div>
-       <div class="form-group">
-           <label>Password</label>
-           <input type="password" name="password" class="form-control">
-       </div>
-       <div class="form-group">
-           <label>Level ID</label>
-           <input type="number" name="level_id" class="form-control">
-       </div>
-       <div class="form-group">
-           <button type="submit" class="btn btn-primary">Simpan</button>
-       </div>
-   </form>
+    <form method="post" action="{{ url('/user/tambah_simpan') }}">
+
+        {{ csrf_field() }}
+
+        @csrf
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Masukkan Username">
+        <br>
+        <label>Nama</label>
+        <input type="text" name="nama" placeholder="Masukkan Nama">
+        <br>
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Masukkan Password">
+        <br>
+        <label>Level ID</label>
+        <input type="number" name="level_id" placeholder="Masukkan ID Level">
+        <br><br>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+    </form>
    ```
-   ![alt text](image/gambar_2_35.png)
 
 5. **Menambahkan route untuk halaman tambah**
    ```php
    Route::get('/user/tambah', [UserController::class, 'tambah']);
    ```
-   ![alt text](image/gambar_2_36.png)
 
 6. **Menambahkan method tambah pada UserController**
    ```php
@@ -381,16 +375,15 @@
        return view('user_tambah');
    }
    ```
-   ![alt text](image/gambar_2_37.png)
 
 7. **Hasil tampilan form Create**
-   ![alt text](image/gambar_2_38.png)
+
+   ![alt text](image-22.png)
 
 8. **Menambahkan route untuk proses penyimpanan data**
    ```php
    Route::post('/user/tambah_simpan', [UserController::class, 'tambah_simpan']);
    ```
-   ![alt text](image/gambar_2_39.png)
 
 9. **Menambahkan method tambah_simpan pada UserController**
    ```php
@@ -405,43 +398,41 @@
        return redirect('/user');
    }
    ```
-   ![alt text](image/gambar_2_40.png)
 
 10. **Hasil setelah Create data user baru**
-    ![alt text](image/gambar_2_41.png)
+
+    ![alt text](image-23.png)
+
+    ![alt text](image-24.png)
 
 11. **Membuat form untuk Update pada user_ubah.blade.php**
     ```php
-    <form method="post" action="{{ url('/user/ubah_simpan', $data->user_id) }}">
+    <form method="post" action="/user/ubah_simpan/{{ $data->user_id }}">
+
+        {{ csrf_field() }}
+        {{ method_field('PUT') }}
+
         @csrf
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" class="form-control" value="{{ $data->username }}">
-        </div>
-        <div class="form-group">
-            <label>Nama</label>
-            <input type="text" name="nama" class="form-control" value="{{ $data->nama }}">
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Level ID</label>
-            <input type="number" name="level_id" class="form-control" value="{{ $data->level_id }}">
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Simpan</button>
-        </div>
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Masukkan Username" value="{{ $data->username }}">
+        <br>
+        <label>Nama</label>
+        <input type="text" name="nama" placeholder="Masukkan Nama" value="{{ $data->nama }}">
+        <br>
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Masukkan Password" value="{{ $data->password }}">
+        <br>
+        <label>Level ID</label>
+        <input type="number" name="level_id" placeholder="Masukkan ID Level" value="{{ $data->level_id }}">
+        <br><br>
+        <button type="submit" class="btn btn-success">Ubah</button>
     </form>
     ```
-    ![alt text](image/gambar_2_42.png)
 
 12. **Menambahkan route untuk halaman ubah**
     ```php
     Route::get('/user/ubah/{id}', [UserController::class, 'ubah']);
     ```
-    ![alt text](image/gambar_2_43.png)
 
 13. **Menambahkan method ubah pada UserController**
     ```php
@@ -451,42 +442,43 @@
         return view('user_ubah', ['data' => $user]);
     }
     ```
-    ![alt text](image/gambar_2_44.png)
 
 14. **Hasil tampilan form Update**
-    ![alt text](image/gambar_2_45.png)
+
+    ![alt text](image-25.png)
 
 15. **Menambahkan route untuk proses update data**
     ```php
-    Route::post('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan']);
+    Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan']);
     ```
-    ![alt text](image/gambar_2_46.png)
 
 16. **Menambahkan method ubah_simpan pada UserController**
     ```php
     public function ubah_simpan(Request $request, $id)
     {
         $user = UserModel::find($id);
+
         $user->username = $request->username;
         $user->nama = $request->nama;
-        if (!empty($request->password)) {
-            $user->password = Hash::make($request->password);
-        }
+        $user->password = Hash::make('$request->password');
         $user->level_id = $request->level_id;
+
         $user->save();
+
         return redirect('/user');
     }
     ```
-    ![alt text](image/gambar_2_47.png)
 
-17. **Hasil setelah Update data user**
-    ![alt text](image/gambar_2_48.png)
+17. **Hasil setelah Update data user dengan id 12**
+
+    ![alt text](image-26.png)
+
+    ![alt text](image-27.png)
 
 18. **Menambahkan route untuk Delete**
     ```php
     Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
     ```
-    ![alt text](image/gambar_2_49.png)
 
 19. **Menambahkan method hapus pada UserController**
     ```php
@@ -494,13 +486,13 @@
     {
         $user = UserModel::find($id);
         $user->delete();
+
         return redirect('/user');
     }
     ```
-    ![alt text](image/gambar_2_50.png)
 
-20. **Hasil setelah Delete data user**
-    ![alt text](image/gambar_2_51.png)
+20. **Hasil setelah Delete data user dengan id 12**
+    ![alt text](image-28.png)
 
 ### Praktikum 2.7 - Relationships
 
