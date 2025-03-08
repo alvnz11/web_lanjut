@@ -32,7 +32,9 @@
    ```
 
 3. **Hasil dari penggunaan fillable pada model**
+
    ![alt text](image.png)
+
    Data pada tabel user bertambah
 
 4. **Mengubah $fillable dan menjalankan kembali**
@@ -61,7 +63,9 @@
    ```
 
 3. **Hasil dari penggunaan find**
+
    ![alt text](image-2.png)
+
    Program hanya menampilkan 1 data dengan id 1 karena kita mengisi fungsi find dengan angka 1
 
 4. **Menggunakan method first() pada UserController.php**
@@ -70,7 +74,9 @@
    ```
 
 5. **Hasil penggunaan method first()**
+
    ![alt text](image-2.png)
+
    Program menampilkan data dengan user_id 1 menggunakan fungsi where
 
 6. **Menggunakan method firstWhere()**
@@ -79,7 +85,9 @@
    ```
 
 7. **Hasil penggunaan method firstWhere()**
+
     ![alt text](image-2.png)
+
     Program menampilkan data dengan user_id 1 menggunakan fungsi firstWhere
 
 8. **Implementasi metode findOr**
@@ -90,11 +98,15 @@
    ```
 
 9. **Hasil penggunaan findOr**
+
    ![alt text](image-4.png)
+
    Program hanya menampilkan username dan nama dari user_id 1
 
 9. **Hasil penggunaan findOr untuk data yang tidak ditemukan**
+
    ![alt text](image-5.png)
+
    Hasilnya error 404 karena program tidak menemukan data dengan id 20
 
 ### Praktikum 2.2 - Not Found Exceptions
@@ -105,6 +117,7 @@
    ```
 
 2. **Hasil penggunaan firstOrFail**
+
    ![alt text](image-6.png)
 
 3. **Implementasi metode firstOrFail untuk data yang tidak ada**
@@ -113,6 +126,7 @@
    ```
 
 4. **Hasil error dari firstOrFail**
+
    ![alt text](image-7.png)
 
 ### Praktikum 2.3 - Retreiving Aggregrates
@@ -124,6 +138,7 @@
    ```
 
 2. **Hasil penggunaan metode count()**
+
    ![alt text](image-8.png)
 
 3. **Menampilkan jumlah user pada halaman browser**
@@ -135,61 +150,93 @@
         <td>{{ $data }}</td>
     </tr>
    ```
+
    ![alt text](image-9.png)
 
 ### Praktikum 2.4 - Retreiving or Creating Models
 
 1. **Implementasi metode firstOrCreate**
    ```php
-   $user = UserModel::firstOrCreate(
-       ['username' => 'manager'],
-       ['nama' => 'Manager', 'password' => Hash::make('12345'), 'level_id' => 2]
-   );
+    $user = UserModel::firstOrCreate(
+        [
+            'username' => 'manager',
+            'nama' => 'Manager',
+        ]
+    );
    ```
-   ![alt text](image/gambar_2_19.png)
 
 2. **Hasil penggunaan firstOrCreate**
-   ![alt text](image/gambar_2_20.png)
 
-3. **Hasil data di database setelah firstOrCreate**
-   ![alt text](image/gambar_2_21.png)
+   ![alt text](image-10.png)
 
-4. **Implementasi metode firstOrCreate untuk data yang sudah ada**
+4. **Implementasi metode firstOrCreate untuk data yang belum ada**
    ```php
-   $user = UserModel::firstOrCreate(
-       ['username' => 'manager'],
-       ['nama' => 'Manager Baru', 'password' => Hash::make('12345'), 'level_id' => 2]
-   );
+    $user = UserModel::firstOrCreate(
+        [
+            'username' => 'manager22',
+            'nama' => 'Manager Dua Dua',
+            'password' => Hash::make('12345'),
+            'level_id' => 2
+        ]
+    );
    ```
-   ![alt text](image/gambar_2_22.png)
 
-5. **Hasil firstOrCreate untuk data yang sudah ada**
-   ![alt text](image/gambar_2_23.png)
+5. **Hasil firstOrCreate untuk data yang belum ada**
+
+   ![alt text](image-11.png)
+
+   ![alt text](image-12.png)
 
 6. **Implementasi metode firstOrNew**
    ```php
-   $user = UserModel::firstOrNew(
-       ['username' => 'kasir2'],
-       ['nama' => 'Kasir Dua', 'password' => Hash::make('12345'), 'level_id' => 3]
-   );
+    $user = UserModel::firstOrNew(
+        [
+            'username' => 'manager',
+            'nama' => 'Manager',
+        ]
+    );
    ```
-   ![alt text](image/gambar_2_24.png)
 
-7. **Hasil penggunaan firstOrNew tanpa save()**
-   ![alt text](image/gambar_2_25.png)
+7. **Hasil penggunaan firstOrNew**
 
-8. **Implementasi metode firstOrNew dengan save()**
+   ![alt text](image-13.png)
+
+8. **Implementasi metode firstOrNew**
    ```php
-   $user = UserModel::firstOrNew(
-       ['username' => 'kasir2'],
-       ['nama' => 'Kasir Dua', 'password' => Hash::make('12345'), 'level_id' => 3]
-   );
-   $user->save();
+    $user = UserModel::firstOrNew(
+        [
+            'username' => 'manager33',
+            'nama' => 'Manager Tiga Tiga',
+            'password' => Hash::make('12345'),
+            'level_id' => 2
+        ]
+    );
    ```
-   ![alt text](image/gambar_2_26.png)
 
-9. **Hasil data di database setelah firstOrNew dengan save()**
-   ![alt text](image/gambar_2_27.png)
+9. **Hasil data di database setelah firstOrNew**
+
+   ![alt text](image-14.png)
+
+   ![alt text](image-15.png)
+
+10. **Implementasi metode firstOrNew dengan save()**
+   ```php
+    $user = UserModel::firstOrNew(
+        [
+            'username' => 'manager33',
+            'nama' => 'Manager Tiga Tiga',
+            'password' => Hash::make('12345'),
+            'level_id' => 2
+        ]
+    );
+    $user->save();
+   ```
+
+11. **Hasil data di database setelah firstOrNew dengan save()**
+
+   ![alt text](image-16.png)
+
+   ![alt text](image-17.png)
 
 ### Praktikum 2.5 - Attribute Changes
 
