@@ -242,47 +242,59 @@
 
 1. **Implementasi metode isDirty dan isClean**
    ```php
-   $user = UserModel::create([
-       'username' => 'manager2',
-       'nama' => 'Manager Dua',
-       'password' => Hash::make('12345'),
-       'level_id' => 2
-   ]);
-   
-   $user->username = 'manager3';
-   
-   $isDirty = $user->isDirty();
-   $isDirtyUsername = $user->isDirty('username');
-   $isDirtyCreatedAt = $user->isDirty('created_at');
-   $isClean = $user->isClean();
-   $isCleanUsername = $user->isClean('username');
-   $isCleanCreatedAt = $user->isClean('created_at');
+    $user = UserModel::create([
+        'username' => 'manager55',
+        'nama' => 'Manager55',
+        'password' => Hash::make('12345'),
+        'level_id' => 2
+    ]);
+    
+    $user->username = 'manager56';
+    
+    $user->isDirty();
+    $user->isDirty('username');
+    $user->isDirty('nama');
+    $user->isDirty(['nama', 'username']);
+    
+    $user->isClean();
+    $user->isClean('username');
+    $user->isClean('nama');
+    $user->isClean(['nama', 'username']);
+    
+    $user->save();
+    
+    $user->isDirty();
+    $user->isClean();
+    dd($user->isDirty());
    ```
-   ![alt text](image/gambar_2_28.png)
 
 2. **Hasil penggunaan isDirty dan isClean**
-   ![alt text](image/gambar_2_29.png)
+
+   ![alt text](image-18.png)
 
 3. **Implementasi metode wasChanged**
    ```php
-   $user = UserModel::create([
-       'username' => 'manager4',
-       'nama' => 'Manager Empat',
-       'password' => Hash::make('12345'),
-       'level_id' => 2
-   ]);
-   
-   $user->username = 'manager5';
-   $user->save();
-   
-   $wasChanged = $user->wasChanged();
-   $wasChangedUsername = $user->wasChanged('username');
-   $wasChangedPassword = $user->wasChanged('password');
+    $user = UserModel::create([
+        'username' => 'manager11',
+        'nama' => 'Manager11',
+        'password' => Hash::make('12345'),
+        'level_id' => 2
+    ]);
+    
+    $user->username = 'manager12';
+
+    $user->save();
+
+    $user->wasChanged();
+    $user->wasChanged('username');
+    $user->wasChanged(['username', 'level_id']);
+    $user->wasChanged('nama');
+    dd($user->wasChanged(['nama', 'username']));
    ```
-   ![alt text](image/gambar_2_30.png)
 
 4. **Hasil penggunaan wasChanged**
-   ![alt text](image/gambar_2_31.png)
+
+   ![alt text](image-19.png)
 
 ### Praktikum 2.6 - Create, Read, Update, Delete (CRUD)
 
