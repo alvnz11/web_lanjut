@@ -33,7 +33,7 @@
 
 3. **Hasil dari penggunaan fillable pada model**
 
-   ![alt text](image.png)
+   ![alt text](image/image.png)
 
    Data pada tabel user bertambah
 
@@ -43,7 +43,7 @@
    ```
 
 5. **Hasil dari perubahan $fillable**
-   ![alt text](image-1.png)
+   ![alt text](image/image-1.png)
    Terjadi error karena password tidak dituliskan dalam fillable
 
 ---
@@ -64,7 +64,7 @@
 
 3. **Hasil dari penggunaan find**
 
-   ![alt text](image-2.png)
+   ![alt text](image/image-2.png)
 
    Program hanya menampilkan 1 data dengan id 1 karena kita mengisi fungsi find dengan angka 1
 
@@ -75,7 +75,7 @@
 
 5. **Hasil penggunaan method first()**
 
-   ![alt text](image-2.png)
+   ![alt text](image/image-2.png)
 
    Program menampilkan data dengan user_id 1 menggunakan fungsi where
 
@@ -86,7 +86,7 @@
 
 7. **Hasil penggunaan method firstWhere()**
 
-    ![alt text](image-2.png)
+    ![alt text](image/image-2.png)
 
     Program menampilkan data dengan user_id 1 menggunakan fungsi firstWhere
 
@@ -99,13 +99,13 @@
 
 9. **Hasil penggunaan findOr**
 
-   ![alt text](image-4.png)
+   ![alt text](image/image-4.png)
 
    Program hanya menampilkan username dan nama dari user_id 1
 
 9. **Hasil penggunaan findOr untuk data yang tidak ditemukan**
 
-   ![alt text](image-5.png)
+   ![alt text](image/image-5.png)
 
    Hasilnya error 404 karena program tidak menemukan data dengan id 20
 
@@ -118,7 +118,7 @@
 
 2. **Hasil penggunaan firstOrFail**
 
-   ![alt text](image-6.png)
+   ![alt text](image/image-6.png)
 
 3. **Implementasi metode firstOrFail untuk data yang tidak ada**
    ```php
@@ -127,7 +127,7 @@
 
 4. **Hasil error dari firstOrFail**
 
-   ![alt text](image-7.png)
+   ![alt text](image/image-7.png)
 
 ### Praktikum 2.3 - Retreiving Aggregrates
 
@@ -139,7 +139,7 @@
 
 2. **Hasil penggunaan metode count()**
 
-   ![alt text](image-8.png)
+   ![alt text](image/image-8.png)
 
 3. **Menampilkan jumlah user pada halaman browser**
    ```php
@@ -151,7 +151,7 @@
     </tr>
    ```
 
-   ![alt text](image-9.png)
+   ![alt text](image/image-9.png)
 
 ### Praktikum 2.4 - Retreiving or Creating Models
 
@@ -167,7 +167,7 @@
 
 2. **Hasil penggunaan firstOrCreate**
 
-   ![alt text](image-10.png)
+   ![alt text](image/image-10.png)
 
 4. **Implementasi metode firstOrCreate untuk data yang belum ada**
    ```php
@@ -183,9 +183,9 @@
 
 5. **Hasil firstOrCreate untuk data yang belum ada**
 
-   ![alt text](image-11.png)
+   ![alt text](image/image-11.png)
 
-   ![alt text](image-12.png)
+   ![alt text](image/image-12.png)
 
 6. **Implementasi metode firstOrNew**
    ```php
@@ -199,7 +199,7 @@
 
 7. **Hasil penggunaan firstOrNew**
 
-   ![alt text](image-13.png)
+   ![alt text](image/image-13.png)
 
 8. **Implementasi metode firstOrNew**
    ```php
@@ -215,9 +215,9 @@
 
 9. **Hasil data di database setelah firstOrNew**
 
-   ![alt text](image-14.png)
+   ![alt text](image/image-14.png)
 
-   ![alt text](image-15.png)
+   ![alt text](image/image-15.png)
 
 10. **Implementasi metode firstOrNew dengan save()**
    ```php
@@ -234,9 +234,9 @@
 
 11. **Hasil data di database setelah firstOrNew dengan save()**
 
-   ![alt text](image-16.png)
+   ![alt text](image/image-16.png)
 
-   ![alt text](image-17.png)
+   ![alt text](image/image-17.png)
 
 ### Praktikum 2.5 - Attribute Changes
 
@@ -270,7 +270,7 @@
 
 2. **Hasil penggunaan isDirty dan isClean**
 
-   ![alt text](image-18.png)
+   ![alt text](image/image-18.png)
 
 3. **Implementasi metode wasChanged**
    ```php
@@ -294,7 +294,7 @@
 
 4. **Hasil penggunaan wasChanged**
 
-   ![alt text](image-19.png)
+   ![alt text](image/image-19.png)
 
 ### Praktikum 2.6 - Create, Read, Update, Delete (CRUD)
 
@@ -338,7 +338,7 @@
 
 3. **Hasil tampilan Read**
 
-   ![alt text](image-21.png)
+   ![alt text](image/image-21.png)
 
 4. **Membuat form untuk Create pada user_tambah.blade.php**
    ```php
@@ -378,7 +378,7 @@
 
 7. **Hasil tampilan form Create**
 
-   ![alt text](image-22.png)
+   ![alt text](image/image-22.png)
 
 8. **Menambahkan route untuk proses penyimpanan data**
    ```php
@@ -401,9 +401,9 @@
 
 10. **Hasil setelah Create data user baru**
 
-    ![alt text](image-23.png)
+    ![alt text](image/image-23.png)
 
-    ![alt text](image-24.png)
+    ![alt text](image/image-24.png)
 
 11. **Membuat form untuk Update pada user_ubah.blade.php**
     ```php
@@ -445,7 +445,7 @@
 
 14. **Hasil tampilan form Update**
 
-    ![alt text](image-25.png)
+    ![alt text](image/image-25.png)
 
 15. **Menambahkan route untuk proses update data**
     ```php
@@ -471,9 +471,9 @@
 
 17. **Hasil setelah Update data user dengan id 12**
 
-    ![alt text](image-26.png)
+    ![alt text](image/image-26.png)
 
-    ![alt text](image-27.png)
+    ![alt text](image/image-27.png)
 
 18. **Menambahkan route untuk Delete**
     ```php
@@ -492,7 +492,7 @@
     ```
 
 20. **Hasil setelah Delete data user dengan id 12**
-    ![alt text](image-28.png)
+    ![alt text](image/image-28.png)
 
 ### Praktikum 2.7 - Relationships
 
@@ -503,7 +503,6 @@
        return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
    }
    ```
-   ![alt text](image/gambar_2_52.png)
 
 2. **Mengubah UserController.php untuk menggunakan relasi level**
    ```php
@@ -513,23 +512,43 @@
        return view('user', ['data' => $data]);
    }
    ```
-   ![alt text](image/gambar_2_53.png)
 
 3. **Hasil dari penggunaan relasi level**
-   ![alt text](image/gambar_2_54.png)
+
+   ![alt text](image/image-29.png)
 
 4. **Mengubah tampilan user untuk menampilkan level**
    ```php
-   <td>{{ $d->level->level_nama }}</td>
+    <tr>
+        {{-- <th>Jumlah Pengguna</th> --}}
+        <th>ID</th>
+        <th>Username</th>
+        <th>Nama</th>
+        <th>ID Level Pengguna</th>
+        <th>Kode Level</th>
+        <th>Nama Level</th>
+        <th>Aksi</th>
+    </tr>
+    @foreach ($data as $d)
+        <tr>
+            <td>{{ $d->user_id }}</td>
+            <td>{{ $d->username }}</td>
+            <td>{{ $d->nama }}</td>
+            <td>{{ $d->level_id }}</td>
+            <td>{{ $d->level->level_kode }}</td>
+            <td>{{ $d->level->level_nama }}</td>
+            <td><a href="/user/ubah/{{ $d->user_id }}">Ubah</a> | <a href="/user/hapus/{{ $d->user_id }}">Hapus</a></td>
+        </tr>
+    @endforeach
    ```
-   ![alt text](image/gambar_2_55.png)
 
 5. **Hasil tampilan dengan relasi level**
-   ![alt text](image/gambar_2_56.png)
+
+   !![alt text](image/image-30.png)
 
 ---
 
-## C. Jawaban Pertanyaan
+
 
 1. **Pada Praktikum 1, apa perbedaan antara $fillable dan $guarded pada model Laravel?**
    - $fillable adalah daftar atribut yang diizinkan untuk assignment massal (mass assignment), sedangkan $guarded adalah daftar atribut yang tidak diizinkan untuk assignment massal. Keduanya berfungsi untuk keamanan mass assignment, tetapi cara kerjanya berkebalikan.
