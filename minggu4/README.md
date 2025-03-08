@@ -544,42 +544,4 @@
 
 5. **Hasil tampilan dengan relasi level**
 
-   !![alt text](image/image-30.png)
-
----
-
-
-
-1. **Pada Praktikum 1, apa perbedaan antara $fillable dan $guarded pada model Laravel?**
-   - $fillable adalah daftar atribut yang diizinkan untuk assignment massal (mass assignment), sedangkan $guarded adalah daftar atribut yang tidak diizinkan untuk assignment massal. Keduanya berfungsi untuk keamanan mass assignment, tetapi cara kerjanya berkebalikan.
-
-2. **Apa kegunaan dari property $table pada model di Laravel?**
-   - Property $table digunakan untuk menentukan nama tabel dalam database yang terkait dengan model. Jika tidak ditentukan, Laravel akan menggunakan bentuk jamak snake_case dari nama model.
-
-3. **Pada Praktikum 2.1, apa perbedaan antara method find() dan first() pada model Eloquent Laravel?**
-   - Method find() digunakan untuk mencari record berdasarkan primary key, sedangkan first() digunakan untuk mengambil record pertama yang sesuai dengan query.
-
-4. **Pada Praktikum 2.2, jelaskan perbedaan antara findOrFail() dan firstOrFail() pada Laravel?**
-   - Keduanya akan melempar ModelNotFoundException jika data tidak ditemukan. findOrFail() mencari berdasarkan primary key, sedangkan firstOrFail() mengambil record pertama yang sesuai dengan query.
-
-5. **Pada Praktikum 2.4, apa perbedaan antara firstOrCreate() dan firstOrNew()?**
-   - firstOrCreate() akan mencari record atau membuat dan menyimpannya ke database jika tidak ditemukan, sedangkan firstOrNew() mencari record atau membuat instance model baru tanpa menyimpannya ke database (perlu memanggil save() secara manual).
-
-6. **Pada Praktikum 2.5, jelaskan perbedaan metode isDirty(), isClean(), dan wasChanged() dalam model Eloquent?**
-   - isDirty(): Memeriksa apakah atribut model telah diubah sejak model diambil
-   - isClean(): Kebalikan dari isDirty(), memeriksa apakah atribut model tidak berubah sejak diambil
-   - wasChanged(): Memeriksa apakah atribut model berubah saat terakhir kali model disimpan
-
-7. **Pada Praktikum 2.7, jelaskan mengapa kita perlu mendefinisikan relasi belongsTo() untuk mengakses model induk?**
-   - Relasi belongsTo() diperlukan untuk mendefinisikan hubungan invers dari hasOne() atau hasMany(), yang memungkinkan model anak untuk mengakses model induk melalui foreign key.
-
-8. **Apa perbedaan utama antara metode hasOne() dan hasMany() dalam mendefinisikan relasi di Laravel?**
-   - hasOne() mendefinisikan relasi satu-ke-satu di mana model memiliki tepat satu model terkait, sedangkan hasMany() mendefinisikan relasi satu-ke-banyak di mana model memiliki banyak model terkait.
-
-9. **Bagaimana cara mengakses data relasi (eager loading) agar menghindari masalah N+1 query di Laravel?**
-   - Menggunakan metode with() untuk melakukan eager loading relasi, contoh: UserModel::with('level')->get()
-
-10. **Apa keuntungan menggunakan Eloquent ORM dibandingkan dengan Query Builder atau DB Facade?**
-    - Eloquent ORM mempermudah pengelolaan relasi antar tabel, memiliki banyak fitur yang lebih OOP, menyediakan event dan observer, serta lebih ekspresif dan mudah dibaca.
-
----
+   ![alt text](image/image-30.png)
