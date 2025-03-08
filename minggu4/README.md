@@ -119,18 +119,23 @@
 
 1. **Menggunakan metode count() pada Model**
    ```php
-   $user = UserModel::count();
+    $user = UserModel::where('level_id', 2)->count();
+    dd($user);
    ```
-   ![alt text](image/gambar_2_16.png)
 
 2. **Hasil penggunaan metode count()**
-   ![alt text](image/gambar_2_17.png)
+   ![alt text](image-8.png)
 
 3. **Menampilkan jumlah user pada halaman browser**
    ```php
-   <p>Jumlah user: {{ $user }}</p>
+    <tr>
+        <th>Jumlah Pengguna</th>
+    </tr>
+    <tr>
+        <td>{{ $data }}</td>
+    </tr>
    ```
-   ![alt text](image/gambar_2_18.png)
+   ![alt text](image-9.png)
 
 ### Praktikum 2.4 - Retreiving or Creating Models
 
