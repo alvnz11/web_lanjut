@@ -33,7 +33,7 @@
 
 3. **Hasil dari penggunaan fillable pada model**
    ![alt text](image.png)
-    Data pada tabel user bertambah
+   Data pada tabel user bertambah
 
 4. **Mengubah $fillable dan menjalankan kembali**
    ```php
@@ -54,56 +54,48 @@
    ```php
    $user = UserModel::find(1);
    ```
-   ![alt text](image/gambar_2_1.png)
 
 2. **Mengubah user.blade.php untuk menampilkan single model**
    ```php
    <p>{{ $user->username }} - {{ $user->nama }}</p>
    ```
-   ![alt text](image/gambar_2_2.png)
 
 3. **Hasil dari penggunaan find**
-   ![alt text](image/gambar_2_3.png)
+   ![alt text](image-2.png)
+   Program hanya menampilkan 1 data dengan id 1 karena kita mengisi fungsi find dengan angka 1
 
 4. **Menggunakan method first() pada UserController.php**
    ```php
-   $user = UserModel::where('level_id', 2)->first();
+   $user = UserModel::where('level_id', 1)->first();
    ```
-   ![alt text](image/gambar_2_4.png)
 
 5. **Hasil penggunaan method first()**
-   ![alt text](image/gambar_2_5.png)
+   ![alt text](image-2.png)
+   Program menampilkan data dengan user_id 1 menggunakan fungsi where
 
 6. **Menggunakan method firstWhere()**
    ```php
    $user = UserModel::firstWhere('level_id', 2);
    ```
-   ![alt text](image/gambar_2_6.png)
 
 7. **Hasil penggunaan method firstWhere()**
-   ![alt text](image/gambar_2_7.png)
+    ![alt text](image-2.png)
+    Program menampilkan data dengan user_id 1 menggunakan fungsi firstWhere
 
 8. **Implementasi metode findOr**
    ```php
-   $user = UserModel::findOr(20, ['username', 'nama'], function () {
-       return 'User tidak ditemukan';
+   $user = UserModel::findOr(1, ['username', 'nama'], function () {
+       abort(404);
    });
    ```
-   ![alt text](image/gambar_2_8.png)
+
+9. **Hasil penggunaan findOr**
+   ![alt text](image-4.png)
+   Program hanya menampilkan username dan nama dari user_id 1
 
 9. **Hasil penggunaan findOr untuk data yang tidak ditemukan**
-   ![alt text](image/gambar_2_9.png)
-
-10. **Menggunakan metode firstOr**
-    ```php
-    $user = UserModel::where('level_id', 20)->firstOr(['username', 'nama'], function () {
-        return 'User tidak ditemukan';
-    });
-    ```
-    ![alt text](image/gambar_2_10.png)
-
-11. **Hasil penggunaan firstOr**
-    ![alt text](image/gambar_2_11.png)
+   ![alt text](image-5.png)
+   Hasilnya error 404 karena program tidak menemukan data dengan id 20
 
 ### Praktikum 2.2 - Not Found Exceptions
 
