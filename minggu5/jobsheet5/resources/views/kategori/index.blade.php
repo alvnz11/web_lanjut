@@ -9,7 +9,10 @@
 @section('content')
     <div class="container">
         <div class="card">
-            <div class="card-header">Manage Kategori</div>
+            <div class="d-flex justify-content-between align-items-center p-3">
+                <span>Manage Kategori</span>
+                <a href="{{ route('kategori.create') }}" class="btn btn-primary">Add</a>
+            </div>
             <div class="card-body">
                 {{ $dataTable->table() }}
             </div>

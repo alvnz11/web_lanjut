@@ -61,7 +61,7 @@
     ```
     - Hasil
 
-    ![alt text](image.png)
+    ![alt text](image/image.png)
 
 
 ---
@@ -158,17 +158,178 @@
 
    - Hasil 
 
-   ![alt text](image-1.png)
+   ![alt text](image/image-1.png)
 
+
+## Praktikum 3 - – Membuat form kemudian menyimpan data dalam database
+
+1. **Menyesuaikan routing**
+    ```php
+    Route::post('/kategori', [KategoriController::class, 'store']);
+    Route::get('/kategori/create', [KategoriController::class, 'create']);
+    ```
+
+2. **Menambahkan 2 function di KategoriController**
+    ```php
+    public function create() {
+        return view('kategori.create');
+    }
+
+    public function store(Request $request) {
+        KategoriModel::crete([
+            'kategori_kode' => $request->kodeKategori,
+            'kategori_nama' => $request->namaKategori,
+        ]);
+        return redirect('/kategori');
+    }
+    ```
+
+3. **Membuat form untuk create**
+    ```php
+    <form method="post" action="../kategori">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="kodeKategori">Kode Kategori</label>
+                <input type="text" class="form-control" id="kodeKategori" name="kodeKategori" placeholder>
+            </div>
+            <div class="form-group">
+                <label for="namaKategori">Nama Kategori</label>
+                <input type="text" class="form-control" id="namaKategori" name="namaKategori" placeholder>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    ```
+
+    - Hasil
+
+    ![alt text](image/image-2.png)
+
+    ![alt text](image/image-3.png)
+    
 ---
 
 ## Tugas Praktikum
 
-1. Buat fitur **Tambah Kategori** dengan tombol **Add** pada halaman **Manage Kategori**.
-2. Tambahkan **Menu Kategori** pada navbar agar mudah diakses.
-3. Buat fitur **Edit** dan **Delete** dengan menggunakan DataTables.
-4. Pastikan seluruh fitur CRUD berfungsi dengan baik.
+1. Tambahkan button Add di halam manage kategori, yang mengarah ke create kategori baru.
+    - Menambahkan div untuk tombol add di kategori/index.blade.php
+
+    ```php
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <span>Manage Kategori</span>
+        <a href="{{ route('kategori.create') }}" class="btn btn-primary">Add</a>
+    </div>
+    ```
+
+    - Hasil
+
+    ![alt text](image/image-4.png)
+
+2. Tambahkan menu untuk halaman manage kategori, di daftar menu navbar
+    - Menambahkan data di config/adminlte.php
+    ```php
+    [
+        'text' => 'Kategori',
+        'url' => 'kategori',
+        'icon' => 'fas fa-tags',
+    ],
+    ```
+
+    - Hasil
+
+    ![alt text](image/image-5.png)
+
+3. Tambahkan action edit di datatables dan buat halaman edit serta controllernya
+    - Menambahkan 2 function di Controller
+    ```php
+        public function edit($id)
+    {
+        $kategori = KategoriModel::findOrFail($id);
+        return view('kategori.edit', compact('kategori'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'kodeKategori' => 'required|max:255',
+            'namaKategori' => 'required|max:255',
+        ]);
+
+        $kategori = KategoriModel::findOrFail($id);
+        $kategori->update([
+            'kategori_kode' => $request->kodeKategori, 
+            'kategori_nama' => $request->namaKategori,
+        ]);
+
+        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diperbarui');
+    }
+    ```
+
+    - Menambahkan form edit
+    ```php
+    <form action="{{ route('kategori.update', $kategori->kategori_id) }}" method="POST">
+        @csrf
+        @method('PUT')
+        
+        <div class="form-group">
+            <label for="kodeKategori">Kode Kategori</label>
+            <input type="text" class="form-control" name="kodeKategori" id="kodeKategori" value="{{ $kategori->kategori_kode }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="namaKategori">Nama Kategori</label>
+            <input type="text" class="form-control" name="namaKategori" id="namaKategori" value="{{ $kategori->kategori_nama }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+    </form>
+    ```
+
+    - Hasil
+
+    ![alt text](image/image-6.png)
+
+    ![alt text](image/image-7.png)
+
+
+
+4. Tambahkan action delete di datatables serta controllernya
+    - Menambahkan function delete di controller
+    ```php
+    public function destroy($id)
+    {
+        $kategori = KategoriModel::findOrFail($id);
+        $kategori->delete();
+
+        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dihapus');
+    }
+    ```
+
+    - Menambah button di index
+    ```php
+    ->addColumn('action', function ($row) {
+        $editUrl = route('kategori.edit', ['id' => $row->kategori_id]);
+        $deleteUrl = route('kategori.destroy', ['id' => $row->kategori_id]);
+
+        return '<a href="'.$editUrl.'" class="btn btn-warning btn-sm">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <form action="'.$deleteUrl.'" method="POST" style="display:inline;" onsubmit="return confirm(\'Apakah Anda yakin ingin menghapus kategori ini?\');">
+                    '.csrf_field().'
+                    '.method_field("DELETE").'
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> Hapus
+                    </button>
+                </form>';
+    })
+    ```
+
+    - Hasil
+
+    ![alt text](image/image-9.png)
+
+    ![alt text](image/image-10.png)
 
 ---
-
-
