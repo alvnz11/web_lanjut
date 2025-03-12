@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\UserDataTable;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(UserDataTable $dataTable)
     {
         // $data = [
         //     'username' => 'customer-1',
@@ -132,16 +133,17 @@ class UserController extends Controller
         // $user->wasChanged('nama');
         // dd($user->wasChanged(['nama', 'username']));
         // $user = UserModel::all();
-        $user = UserModel::with('level')->get();
+        // $user = UserModel::with('level')->get();
         // dd($user);
 
         // // $user = UserModel::all();
-        return view('user', ['data' => $user]);
+        // return view('user', ['data' => $user]);
+        return $dataTable->render('user.user');
     }
 
     public function tambah()
     {
-        return view('user_tambah');
+        return view('user.user_tambah');
     }
 
     public function tambah_simpan(Request $request)
@@ -158,7 +160,7 @@ class UserController extends Controller
     public function ubah($id)
     {
         $user = UserModel::find($id);
-        return view('user_ubah', ['data' => $user]);
+        return view('user.user_ubah', ['data' => $user]);
     }
 
     public function ubah_simpan(Request $request, $id)
