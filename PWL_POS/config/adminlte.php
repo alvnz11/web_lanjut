@@ -330,23 +330,23 @@ return [
         [
             'text' => 'Home',
             'url' => '/',
-            'icon' => 'fas fa-fw fa-user',
+            // 'icon' => 'fa-solid fa-house',
         ],
         ['header' => 'CRUD'],
         [
-            'text' => 'User',
-            'url' => 'user',
-            'icon' => 'fas fa-fw fa-user',
+            'text' => 'User',  
+            'url' => 'users',
+            // 'icon' => 'fas fa-fw fa-user',
         ],
         [
             'text' => 'Level',
             'url' => 'level',
-            'icon' => 'fas fa-fw fa-user',
+            // 'icon' => 'fas fa-fw fa-user',
         ],
         [
             'text' => 'Kategori',
             'url' => 'kategori',
-            'icon' => 'fas fa-tags',
+            // 'icon' => 'fas fa-tags',
         ],
         // [
         //     'text' => 'change_password',

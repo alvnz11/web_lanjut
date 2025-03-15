@@ -3,13 +3,12 @@
 namespace App\DataTables;
 
 use App\Models\User;
+use App\Models\UserModel;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
 class UserDataTable extends DataTable
@@ -23,13 +22,13 @@ class UserDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
         ->addColumn('action', function ($row) {
-            $editUrl = route('kategori.edit', ['id' => $row->kategori_id]);
-            $deleteUrl = route('kategori.destroy', ['id' => $row->kategori_id]);
+            $editUrl = route('users.edit', ['user' => $row->user_id]);
+            $deleteUrl = route('users.destroy', ['user' => $row->user_id]);
 
             return '<a href="'.$editUrl.'" class="btn btn-warning btn-sm">
                         <i class="fas fa-edit"></i> Edit
                     </a>
-                    <form action="'.$deleteUrl.'" method="POST" style="display:inline;" onsubmit="return confirm(\'Apakah Anda yakin ingin menghapus kategori ini?\');">
+                    <form action="'.$deleteUrl.'" method="POST" style="display:inline;" onsubmit="return confirm(\'Apakah Anda yakin ingin menghapus user ini?\');">
                         '.csrf_field().'
                         '.method_field("DELETE").'
                         <button type="submit" class="btn btn-danger btn-sm">
@@ -37,14 +36,16 @@ class UserDataTable extends DataTable
                         </button>
                     </form>';
         })
-            ->setRowId('id');
+        ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(User $model): QueryBuilder
+    public function query(UserModel $model): QueryBuilder
     {
+        // Jika perlu, tambahkan relasi dengan tabel level
+        // return $model->newQuery()->with('level');
         return $model->newQuery();
     }
 
@@ -57,8 +58,7 @@ class UserDataTable extends DataTable
                     ->setTableId('user-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
+                    ->orderBy(0) // Menggunakan kolom id (indeks 0) untuk pengurutan
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),
@@ -76,16 +76,16 @@ class UserDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-
-            Column::make('user_id'),
-            Column::make('level_id'),
+            Column::make('user_id')->addClass('text-start'),
             Column::make('username'),
             Column::make('nama'),
-            Column::computed('action')
-            ->exportable(false)
-            ->printable(false)
-            ->width(60)
-            ->addClass('text-center'),
+            Column::make('level_id')->addClass('text-start'),
+            Column::make('action'),
+            // Column::computed('action')
+            //     ->exportable(false)
+            //     ->printable(false)
+            //     ->width(120)
+            //     ->addClass('text-center'),
         ];
     }
 

@@ -7,7 +7,7 @@
 
 {{-- Content body: main page content --}}
 @section('content_body')
-    <p>Welcome to this beautiful admin panel.</p>
+    <p>Selamat Datang di project PWL_POS Alvanza Saputra.</p>
 @stop
 
 {{-- Push extra CSS --}}
