@@ -20,7 +20,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/level', [LevelController::class, 'index']);
+Route::resource('level', LevelController::class);
+// Route::get('/level', [LevelController::class, 'index']);
 Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
 Route::post('/kategori', [KategoriController::class, 'store']);
 Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');

@@ -327,10 +327,20 @@ return [
         //     'label' => 4,
         //     'label_color' => 'success',
         // ],
+        [
+            'text' => 'Home',
+            'url' => '/',
+            'icon' => 'fas fa-fw fa-user',
+        ],
         ['header' => 'CRUD'],
         [
             'text' => 'User',
             'url' => 'user',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'Level',
+            'url' => 'level',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
