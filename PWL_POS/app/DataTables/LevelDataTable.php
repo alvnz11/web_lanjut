@@ -23,21 +23,21 @@ class LevelDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-        // ->addColumn('action', function ($row) {
-        //     $editUrl = route('kategori.edit', ['id' => $row->kategori_id]);
-        //     $deleteUrl = route('kategori.destroy', ['id' => $row->kategori_id]);
+        ->addColumn('action', function ($row) {
+            $editUrl = route('level.edit', ['level' => $row->level_id]);
+            $deleteUrl = route('level.destroy', ['level' => $row->level_id]);
 
-        //     return '<a href="'.$editUrl.'" class="btn btn-warning btn-sm">
-        //                 <i class="fas fa-edit"></i> Edit
-        //             </a>
-        //             <form action="'.$deleteUrl.'" method="POST" style="display:inline;" onsubmit="return confirm(\'Apakah Anda yakin ingin menghapus kategori ini?\');">
-        //                 '.csrf_field().'
-        //                 '.method_field("DELETE").'
-        //                 <button type="submit" class="btn btn-danger btn-sm">
-        //                     <i class="fas fa-trash"></i> Hapus
-        //                 </button>
-        //             </form>';
-        // })
+            return '<a href="'.$editUrl.'" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <form action="'.$deleteUrl.'" method="POST" style="display:inline;" onsubmit="return confirm(\'Apakah Anda yakin ingin menghapus Level ini?\');">
+                        '.csrf_field().'
+                        '.method_field("DELETE").'
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </form>';
+        })
             ->setRowId('id');
     }
 
@@ -81,6 +81,7 @@ class LevelDataTable extends DataTable
             Column::make('level_id')->addClass('text-start'),
             Column::make('level_kode'),
             Column::make('level_nama'),
+            Column::make('action'),
             // Column::computed('action')
             // ->exportable(false)
             // ->printable(false)

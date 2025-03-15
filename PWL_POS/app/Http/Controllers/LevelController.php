@@ -38,4 +38,34 @@ class LevelController extends Controller
         ]);
         return redirect('/level');
     }
+
+    public function edit($level)
+    {
+        $level = LevelModel::findOrFail($level);
+        return view('level.form', compact('level')); 
+    }
+
+    public function update(Request $request, $level)
+    {
+        $request->validate([
+            'kodeLevel' => 'required|max:255',
+            'namaLevel' => 'required|max:255',
+        ]);
+
+        $level = LevelModel::findOrFail($level);
+        $level->update([
+            'level_kode' => $request->kodeLevel, 
+            'level_nama' => $request->namaLevel,
+        ]);
+
+        return redirect()->route('level.index')->with('success', 'Level berhasil diperbarui');
+    }
+
+    public function destroy($id)
+    {
+        $level = LevelModel::findOrFail($id);
+        $level->delete();
+
+        return redirect()->route('level.index')->with('success', 'level berhasil dihapus');
+    }
 }
