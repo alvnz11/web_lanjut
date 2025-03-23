@@ -56,7 +56,6 @@
     var dataUser;
     $(document).ready(function() { 
       dataUser = $('#table_user').DataTable({ 
-          // serverSide: true, jika ingin menggunakan server side processing 
           serverSide: true,      
           ajax: { 
               "url": "{{ url('user/list') }}", 
@@ -67,7 +66,7 @@
               }
           }, 
           columns: [ 
-            {  // nomor urut dari laravel datatable addIndexColumn() 
+            {  
               data: "DT_RowIndex",             
               className: "text-center", 
               orderable: false, 
@@ -75,9 +74,7 @@
             },{ 
               data: "username",                
               className: "", 
-              // orderable: true, jika ingin kolom ini bisa diurutkan  
               orderable: true,     
-              // searchable: true, jika ingin kolom ini bisa dicari 
               searchable: true     
             },{ 
               data: "nama",                
@@ -85,7 +82,6 @@
               orderable: true,     
               searchable: true     
             },{ 
-              // mengambil data level hasil dari ORM berelasi 
               data: "level.level_nama",                
               className: "", 
               orderable: false,     
