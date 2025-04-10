@@ -15,4 +15,7 @@ Kelas   : TI-2A
 | Pertemuan 4 (MODEL dan ELOQUENT ORM) | [Week 4](https://github.com/alvnz11/web_lanjut/tree/main/minggu4) |
 | Pertemuan 5 (Blade View, Web Templating(AdminLTE), Datatables) | [Week 5](https://github.com/alvnz11/web_lanjut/tree/main/minggu5) |
 | Pertemuan 6 (Ajax Form (AdminLTE) dan Client Validation) | [Week 6](https://github.com/alvnz11/web_lanjut/tree/main/minggu6) |
+| Pertemuan 7 (Authentication dan Authorization di Laravel) | [Week 7](https://github.com/alvnz11/web_lanjut/tree/main/minggu7) |
+| Pertemuan 8 (File Import dan Export ke PDF dan Excel pada Laravel) | [Week 8](https://github.com/alvnz11/web_lanjut/tree/main/minggu8) |
+| UTS (Implementasi PWL_POS) | [UTS](https://github.com/alvnz11/web_lanjut/tree/main/PWL_POS) |
 ---
