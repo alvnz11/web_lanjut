@@ -55,3 +55,30 @@
     - Yang saya pahami dari praktikum 2 ini adalah kita bisa memisahkan fitur-fitur sesuai dengan role dari usernya dengan menggunakan middleware ini. Jadi hanya dengan mendaftarkan routenya sesuai dengan rolenya kita sudah bisa memisahkan fitur-fiturnya
 2. Amati dan jelaskan tiap tahapan yang kalian kerjakan, dan jabarkan dalam laporan
 3. Submit kode untuk impementasi Authorization pada repository github kalian.
+
+## Praktikum 3 - Implementasi Multi-Level Authorizaton di Laravel dengan Middleware
+
+### Langkah-langkah:
+1. **Memodifikasi `UserModel.php`**
+2. **Membuat `AuthorizeUser.php`**
+3. **Memodifikasi `web.php`**
+4. **Hasil**
+    - Saat login menggunakan akun dengan level Admin
+
+    ![alt text](image-4.png)
+
+    - Saat login menggunakan akun dengan level Manager
+
+    ![alt text](image-5.png)
+
+    - Saat login menggunakan akun dengan level Customr
+
+    ![alt text](image-6.png)
+
+### Tugas 3:
+1. Silahkan implementasikan multi-level authorization pada project kalian masing-masing
+2. Amati dan jelaskan tiap tahapan yang kalian kerjakan, dan jabarkan dalam laporan
+3. Implementasikan multi-level authorization untuk semua Level/Jenis User dan Menu-menu yang sesuai dengan Level/Jenis User
+    - Role Admin : Semua Fitur
+    - Role Manager : Fitur Kategori, Barang, dan Supplier
+4. Submit kode untuk impementasi Authorization pada repository github kalian.
