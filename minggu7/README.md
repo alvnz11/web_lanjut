@@ -22,14 +22,14 @@
 5. **Memodifikasi `web.php`**
 6. **Hasil**
 
-    ![alt text](image.png)
+    ![alt text](image/image.png)
 
 ### Tugas 1:
 1. Silahkan implementasikan proses login pada project kalian masing-masing
 2. Silahkan implementasi proses logout pada halaman web yang kalian buat
     - Membuat button login di header 
 
-    ![alt text](image-1.png)
+    ![alt text](image/image-1.png)
 
 3. Amati dan jelaskan tiap tahapan yang kalian kerjakan, dan jabarkan dalam laporan
 4. Submit kode untuk impementasi Authentication pada repository github kalian.
@@ -44,11 +44,11 @@
 5. **Hasil**
     - Saat login menggunakan akun dengan level Admin
 
-    ![alt text](image-2.png)
+    ![alt text](image/image-2.png)
 
     - Saat login menggunakan akun dengan level Manager
 
-    ![alt text](image-3.png)
+    ![alt text](image/image-3.png)
 
 ### Tugas 2:
 1. Apa yang kalian pahami pada praktikum 2 ini?
@@ -65,15 +65,15 @@
 4. **Hasil**
     - Saat login menggunakan akun dengan level Admin
 
-    ![alt text](image-4.png)
+    ![alt text](image/image-4.png)
 
     - Saat login menggunakan akun dengan level Manager
 
-    ![alt text](image-5.png)
+    ![alt text](image/image-5.png)
 
     - Saat login menggunakan akun dengan level Customr
 
-    ![alt text](image-6.png)
+    ![alt text](image/image-6.png)
 
 ### Tugas 3:
 1. Silahkan implementasikan multi-level authorization pada project kalian masing-masing
@@ -196,6 +196,6 @@
 
     - Hasil
 
-    ![alt text](image-7.png)
+    ![alt text](image/image-7.png)
 
 3. Commit dan push hasil tugas kalian ke masing-masing repo github kalian
