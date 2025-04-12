@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\LevelModel;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -36,7 +37,7 @@ class UserController extends Controller
 
     public function list(Request $request)
     {
-        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
+        $users = UserModel::select('user_id', 'username', 'nama', 'level_id', 'path_foto')
             ->with('level');
 
         if ($request->level_id) {
@@ -47,13 +48,6 @@ class UserController extends Controller
             ->addIndexColumn()
             ->addColumn('aksi', function ($user) {  // menambahkan kolom aksi 
                 $btn  = '<a href="' . url('/user/' . $user->user_id) . '" class="btn btn-info btn-sm">Detail</a> ';
-                // $btn .= '<a href="' . url('/user/' . $user->user_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
-                // $btn .= '<form class="d-inline-block" method="POST" action="' .
-                //     url('/user/' . $user->user_id) . '">'
-                //     . csrf_field() . method_field('DELETE') .
-                //     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakit menghapus data ini?\');">Hapus</button></form>';
-                // $btn  = '<button onclick="modalAction(\'' . url('/user/' . $user->user_id .
-                //     '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/user/' . $user->user_id .
                     '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/user/' . $user->user_id .
@@ -88,15 +82,26 @@ class UserController extends Controller
             'username' => 'required|string|min:3|unique:m_user,username',
             'nama' => 'required|string|max:100',
             'password' => 'required|min:5',
-            'level_id' => 'required|integer'
+            'level_id' => 'required|integer',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        UserModel::create([
+        $data = [
             'username' => $request->username,
             'nama' => $request->nama,
             'password' => bcrypt($request->password),
             'level_id' => $request->level_id
-        ]);
+        ];
+
+        // Handle file upload
+        if ($request->hasFile('foto_profil')) {
+            $file = $request->file('foto_profil');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/foto_profil', $fileName);
+            $data['path_foto'] = 'foto_profil/' . $fileName;
+        }
+
+        UserModel::create($data);
 
         return redirect('/user')->with('success', 'User berhasil ditambahkan');
     }
@@ -142,17 +147,38 @@ class UserController extends Controller
     {
         $request->validate([
             'username' => 'required|string|min:3|unique:m_user,username,' . $id . ',user_id',
-            'nama'     => 'required|string|max:100', //harus, string, maksimal 100 karakter
-            'password' => 'nullable|min:5', //tidak wajib
-            'level_id' => 'required|integer' //harus, angka
+            'nama'     => 'required|string|max:100',
+            'password' => 'nullable|min:5',
+            'level_id' => 'required|integer',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        UserModel::find($id)->update([
+        $data = [
             'username' => $request->username,
             'nama'     => $request->nama,
-            'password' => $request->password ? bcrypt($request->password) : UserModel::find($id)->password,
             'level_id' => $request->level_id
-        ]);
+        ];
+
+        if ($request->password) {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        // Handle file upload
+        if ($request->hasFile('foto_profil')) {
+            $user = UserModel::find($id);
+            
+            // Delete old file if exists
+            if ($user->path_foto) {
+                Storage::delete('public/' . $user->path_foto);
+            }
+            
+            $file = $request->file('foto_profil');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/foto_profil', $fileName);
+            $data['path_foto'] = 'foto_profil/' . $fileName;
+        }
+
+        UserModel::find($id)->update($data);
 
         return redirect('/user')->with('success', 'User berhasil diubah');
     }
@@ -165,6 +191,11 @@ class UserController extends Controller
         }
 
         try {
+            // Delete file if exists
+            if ($check->path_foto) {
+                Storage::delete('public/' . $check->path_foto);
+            }
+            
             UserModel::destroy($id);
             return redirect('/user')->with('success', 'User berhasil dihapus');
         } catch (\Illuminate\Database\QueryException $e) {
@@ -185,7 +216,8 @@ class UserController extends Controller
                 'level_id' => 'required|integer',
                 'username' => 'required|string|min:3|unique:m_user,username',
                 'password' => 'required|min:5',
-                'nama' => 'required|string|max:100'
+                'nama' => 'required|string|max:100',
+                'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -194,11 +226,26 @@ class UserController extends Controller
                 return response()->json([
                     'status' => false,
                     'messages' => "Validasi Gagal",
-                    'msgfield' => $validator->errors(),
+                    'msgField' => $validator->errors(),
                 ]);
             }
 
-            UserModel::create($request->all());
+            $data = [
+                'level_id' => $request->level_id,
+                'username' => $request->username,
+                'nama' => $request->nama,
+                'password' => bcrypt($request->password)
+            ];
+
+            // Handle file upload
+            if ($request->hasFile('foto_profil')) {
+                $file = $request->file('foto_profil');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('public/foto_profil', $fileName);
+                $data['path_foto'] = 'foto_profil/' . $fileName;
+            }
+
+            UserModel::create($data);
 
             return response()->json([
                 'status' => true,
@@ -225,7 +272,8 @@ class UserController extends Controller
                 'level_id' => 'required|integer',
                 'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
                 'nama'     => 'required|max:100',
-                'password' => 'nullable|min:6|max:20'
+                'password' => 'nullable|min:6|max:20',
+                'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
             ];
 
             // use Illuminate\Support\Facades\Validator; 
@@ -239,13 +287,32 @@ class UserController extends Controller
                 ]);
             }
 
-            $check = UserModel::find($id);
-            if ($check) {
-                if (!$request->filled('password')) { // jika password tidak diisi, maka hapus dari request 
-                    $request->request->remove('password');
+            $user = UserModel::find($id);
+            if ($user) {
+                $data = [
+                    'level_id' => $request->level_id,
+                    'username' => $request->username,
+                    'nama'     => $request->nama,
+                ];
+                
+                if ($request->filled('password')) {
+                    $data['password'] = bcrypt($request->password);
                 }
 
-                $check->update($request->all());
+                // Handle file upload
+                if ($request->hasFile('foto_profil')) {
+                    // Delete old file if exists
+                    if ($user->path_foto) {
+                        Storage::delete('public/' . $user->path_foto);
+                    }
+                    
+                    $file = $request->file('foto_profil');
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->storeAs('public/foto_profil', $fileName);
+                    $data['path_foto'] = 'foto_profil/' . $fileName;
+                }
+
+                $user->update($data);
                 return response()->json([
                     'status'  => true,
                     'message' => 'Data berhasil diupdate'
@@ -269,6 +336,11 @@ class UserController extends Controller
         if($request->ajax() || $request->wantsJson()){
             $user = UserModel::find($id);
             if ($user) {
+                // Delete file if exists
+                if ($user->path_foto) {
+                    Storage::delete('public/' . $user->path_foto);
+                }
+                
                 $user->delete();
                 return response()->json([
                     'status' => true,

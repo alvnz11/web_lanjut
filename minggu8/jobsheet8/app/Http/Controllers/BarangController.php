@@ -296,7 +296,7 @@ class BarangController extends Controller
                     ->with('kategori')
                     ->get();
 
-        $imagePath = public_path('polinema.png');
+        $imagePath = public_path('/images/polinema.png');
         $imageData = base64_encode(file_get_contents($imagePath));
         $imageSrc = 'data:image/png;base64,' . $imageData;
 

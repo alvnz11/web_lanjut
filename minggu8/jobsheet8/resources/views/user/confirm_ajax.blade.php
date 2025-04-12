@@ -3,8 +3,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Kesalahan</h5>
-            <button type="button" class="close" data-dismiss="modal" aria
-                label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
             <div class="alert alert-danger">
@@ -23,32 +22,46 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Hapus Data User</h5>
-                <button type="button" class="close" data-dismiss="modal" aria
-                    label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-warning">
-                    <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Konfirmasi !!!</h5>
                     Apakah Anda ingin menghapus data seperti di bawah ini?
                 </div>
-                <table class="table table-sm table-bordered table-striped">
-                    <tr>
-                        <th class="text-right col-3">Level Pengguna :</th>
-                        <td class="col-9">{{ $user->level->level_nama }}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-right col-3">Username :</th>
-                        <td class="col-9">{{ $user->username }}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-right col-3">Nama :</th>
-                        <td class="col-9">{{ $user->nama }}</td>
-                    </tr>
-                </table>
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3">
+                        @if($user->path_foto)
+                            <img id="preview-image" src="{{ asset('storage/'.$user->path_foto) }}" alt="Foto Profil" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                        @else
+                            <img id="preview-image" src="{{ asset('images/default-avatar.png') }}" alt="Foto Profil" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                        @endif
+                    </div>
+                    <div class="col-md-9">
+                        <div class="bg-light p-2 mb-2">
+                            <div class="row">
+                                <div class="col-md-4 font-weight-bold text-right">Level Pengguna :</div>
+                                <div class="col-md-8">{{ $user->level->level_nama }}</div>
+                            </div>
+                        </div>
+                        <div class="bg-light p-2 mb-2">
+                            <div class="row">
+                                <div class="col-md-4 font-weight-bold text-right">Username :</div>
+                                <div class="col-md-8">{{ $user->username }}</div>
+                            </div>
+                        </div>
+                        <div class="bg-light p-2">
+                            <div class="row">
+                                <div class="col-md-4 font-weight-bold text-right">Nama :</div>
+                                <div class="col-md-8">{{ $user->nama }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                <button type="submit" class="btn btn-primary">Ya, Hapus</button>
+                <button type="submit" class="btn btn-danger">Ya, Hapus</button>
             </div>
         </div>
     </div>
