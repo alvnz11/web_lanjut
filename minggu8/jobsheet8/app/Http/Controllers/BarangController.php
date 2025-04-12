@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\LevelModel;
 use App\Models\BarangModel;
 use App\Models\KategoriModel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -284,5 +285,30 @@ class BarangController extends Controller
         $writer->save('php://output');
         exit;
 
+    }
+
+    public function export_pdf()
+    {
+        ini_set('max_execution_time', 300);
+
+        $barang = BarangModel::select('kategori_id','barang_kode','barang_nama','harga_beli','harga_jual')
+                    ->orderBy('kategori_id')
+                    ->with('kategori')
+                    ->get();
+
+        $imagePath = public_path('polinema.png');
+        $imageData = base64_encode(file_get_contents($imagePath));
+        $imageSrc = 'data:image/png;base64,' . $imageData;
+
+        $pdf = Pdf::loadView('barang.export_pdf', [
+            'barang' => $barang,
+            'logoSrc' => $imageSrc
+        ]);
+    
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Barang '.date('Y-m-d H:i:s').'.pdf');
     }
 }

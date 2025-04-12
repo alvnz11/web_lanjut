@@ -62,6 +62,26 @@
         ![alt text](image-5.png)
 
 ### Tugas 2:
-1. Silahkan implementasikan praktikum 2 pada project kalian masing-masing untuk semua menu
+1. Silahkan implementasikan praktikum 2 pada project kalian masing-masing untuk semuamenu
 2. Amati dan jelaskan tiap tahapan yang kalian kerjakan, dan jabarkan dalam laporan
 3. Submit kode untuk impementasi prakktikum 2 pada repository github kalian.
+
+## Praktikum 3 - Implementasi Export PDF pada Laravel
+
+### Langkah-langkah:
+1. **Menginstall library dengan command**
+    ```
+    composer require barryvdh/laravel-dompdf
+    ```
+2. **Memodifikasi `barang/index.blade.php`**
+3. **Memodifikasi `web.php`**
+4. **Menambahkan fungsi export_pdf() di `BarangController.php`**
+5. **Menambahkan view di `barang/export_pdf.blade.php`**
+4. **Hasil**
+    - Tombol export pdf
+
+        ![alt text](image-6.png)
+        
+    - Hasil generate pdf
+
+        ![alt text](image-7.png)
