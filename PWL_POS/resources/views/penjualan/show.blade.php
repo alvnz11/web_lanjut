@@ -40,7 +40,7 @@
                 <table class="table table-borderless">
                     <tr>
                         <th width="30%">Petugas</th>
-                        <td>: {{ $penjualan->user->nama }}</td>
+                        <td>: Staff/Kasir</td>
                     </tr>
                     <tr>
                         <th>Status</th>

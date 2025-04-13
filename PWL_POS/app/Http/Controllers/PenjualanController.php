@@ -153,12 +153,22 @@ class PenjualanController extends Controller
                     'jumlah' => $item['quantity']
                 ]);
                 
-                StokModel::create([
-                    'barang_id' => $id,
-                    'user_id' => Auth::id(),
-                    'stok_tanggal' => now(),
-                    'stok_jumlah' => -$item['quantity']
-                ]);
+                $stocks = StokModel::where('barang_id', $id)
+                ->where('stok_jumlah', '>', 0)
+                ->orderBy('stok_tanggal')
+                ->get();
+            
+                $remainingQuantity = $item['quantity'];
+                foreach ($stocks as $stock) {
+                    if ($remainingQuantity <= 0) break;
+                    
+                    $reduction = min($stock->stok_jumlah, $remainingQuantity);
+                    $stock->stok_jumlah -= $reduction;
+                    $stock->updated_at = now();
+                    $stock->save();
+                    
+                    $remainingQuantity -= $reduction;
+                }
             }
             
             session()->forget('cart');
@@ -200,7 +210,7 @@ class PenjualanController extends Controller
             $penjualanKode = 'TX' . date('ymd') . Auth::id() . substr(uniqid(), -4);
             $penjualan = PenjualanModel::create([
                 'user_id' => Auth::id(),
-                'pembeli' => Auth::user()->nama,
+                'pembeli' => $request->pembeli,
                 'penjualan_kode' => $penjualanKode,
                 'penjualan_tanggal' => now()
             ]);
@@ -222,12 +232,22 @@ class PenjualanController extends Controller
                     'jumlah' => $jumlah
                 ]);
                 
-                StokModel::create([
-                    'barang_id' => $barangId,
-                    'user_id' => Auth::id(),
-                    'stok_tanggal' => now(),
-                    'stok_jumlah' => -$jumlah
-                ]);
+                $stocks = StokModel::where('barang_id', $barangId)
+                    ->where('stok_jumlah', '>', 0)
+                    ->orderBy('stok_tanggal', 'asc')
+                    ->get();
+                
+                $remainingQuantity = $jumlah;
+                foreach ($stocks as $stock) {
+                    if ($remainingQuantity <= 0) break;
+                    
+                    $reduction = min($stock->stok_jumlah, $remainingQuantity);
+                    $stock->stok_jumlah -= $reduction;
+                    $stock->updated_at = now();
+                    $stock->save();
+                    
+                    $remainingQuantity -= $reduction;
+                }
             }
             
             DB::commit();

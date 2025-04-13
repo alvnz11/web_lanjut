@@ -12,6 +12,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PenjualanController;
+use App\Models\StokModel;
 
 Route::pattern('id', '[0-9]+');
 
@@ -144,6 +145,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax']);
             Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax']);
             Route::get('/export_pdf', [StokController::class, 'export_pdf']);
+            Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_ajax']);
+            Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax']);
         });
         
         Route::post('/add-to-cart', [StokController::class, 'addToCart']);

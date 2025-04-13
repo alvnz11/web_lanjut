@@ -33,40 +33,60 @@
 
 <script>
 $(function() {
-    $('#formStok').submit(function(e) {
-        e.preventDefault();
-        
-        $.ajax({
-            url: $(this).attr('action'),
-            method: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(response) {
-                if (response.status) {
-                    $('#myModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: response.message
-                    }).then((result) => {
-                        tableStok.draw();
-                    });
-                } else {
+    $('#formStok').validate({
+        rules: {
+            barang_id: {
+                required: true
+            },
+            stok_jumlah: {
+                required: true,
+                min: 1
+            }
+        },
+        messages: {
+            barang_id: {
+                required: "Silakan pilih barang"
+            },
+            stok_jumlah: {
+                required: "Jumlah stok harus diisi",
+                min: "Jumlah stok minimal 1"
+            }
+        },
+        submitHandler: function(form) {
+            $.ajax({
+                url: $(form).attr('action'),
+                method: 'POST',
+                data: $(form).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status) {
+                        $('#myModal').modal('hide');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message
+                        }).then((result) => {
+                            tableStok.ajax.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: response.message,
+                            footer: response.errors ? Object.values(response.errors).join('<br>') : ''
+                        });
+                    }
+                },
+                error: function(xhr) {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Gagal',
-                        text: response.message
+                        title: 'Oops...',
+                        text: 'Terjadi kesalahan! Silahkan coba lagi.'
                     });
                 }
-            },
-            error: function(xhr) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Terjadi kesalahan! Silahkan coba lagi.'
-                });
-            }
-        });
+            });
+            return false;
+        }
     });
 });
 </script>

@@ -24,7 +24,6 @@
                     <th>Kode Transaksi</th>
                     <th>Tanggal</th>
                     <th>Pembeli</th>
-                    <th>Petugas</th>
                     <th>Total</th>
                     <th>Aksi</th>
                 </tr>
@@ -64,10 +63,6 @@ $(document).ready(function(){
             data: "pembeli",
             className: "",
             width: "20%",
-        },{
-            data: "user.nama",
-            className: "",
-            width: "15%",
         },{
             data: "total",
             className: "text-right",

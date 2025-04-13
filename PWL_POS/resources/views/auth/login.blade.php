@@ -263,7 +263,9 @@
                 <div style="background-color: #6b2c70; width: 10px; height: 10px;"></div>
                 <div style="background-color: #6b2c70; width: 10px; height: 10px;"></div>
               </div>
-              <b>PWL</b>_POS
+              <a href="/" class="text-decoration-none text-dark">
+                <b>PWL</b>_POS  
+              </a>
             </div>
           </div>
           
@@ -310,7 +312,9 @@
                 <div style="background-color: #6b2c70; width: 10px; height: 10px;"></div>
                 <div style="background-color: #6b2c70; width: 10px; height: 10px;"></div>
               </div>
-              <b>PWL</b>_POS
+              <a href="/" class="text-decoration-none text-dark">
+                <b>PWL</b>_POS  
+              </a>
             </div>
           </div>
           

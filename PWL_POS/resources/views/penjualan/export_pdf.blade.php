@@ -138,7 +138,7 @@
         <p>
             <strong>Tanggal:</strong> {{ date('d-m-Y', strtotime($p->penjualan_tanggal)) }}<br>
             <strong>Pembeli:</strong> {{ $p->pembeli }}<br>
-            <strong>Petugas:</strong> {{ $p->user->nama }}
+            <strong>Petugas:</strong> Staff/Kasir
         </p>
         
         <table class="border-all">

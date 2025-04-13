@@ -14,17 +14,14 @@
             <div id="filter" class="form-horizontal filter-date p-2 border-bottom mb-2">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="form-group form-group-sm row text-sm mb-0">
-                            <label for="filter_date" class="col-md-1 col-form-label">Filter</label>
-                            <div class="col-md-3">
-                                <select name="filter_barang" class="form-control form-control-sm filter_barang">
-                                    <option value="">- Semua Barang -</option>
-                                    @foreach($barang as $b)
+                        <div class="form-group">
+                            <label for="barang_id">Pilih Barang</label>
+                            <select name="barang_id" id="barang_id" class="form-control" required>
+                                <option value="">-- Pilih Barang --</option>
+                                @foreach($barang as $b)
                                     <option value="{{ $b->barang_id }}">{{ $b->barang_kode }} - {{ $b->barang_nama }}</option>
-                                    @endforeach
-                                </select>
-                                <small class="form-text text-muted">Barang</small>
-                            </div>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
