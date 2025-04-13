@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StokController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\BarangController;
@@ -13,13 +14,12 @@ use App\Http\Controllers\SupplierController;
 Route::pattern('id', '[0-9]+');
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
-Route::post(('login'), [AuthController::class, 'postlogin']);
+Route::post('login', [AuthController::class, 'postlogin']);
+Route::post('register', [AuthController::class, 'register'])->name('register.store');
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
-Route::get('/register', [RegisterController::class, 'create'])->name('register.form'); // Change this one
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [WelcomeController::class, 'index']);
+    Route::get('/dashboard', [WelcomeController::class, 'index']);
 
     Route::middleware(['authorize:ADM'])->group(function () {
         // Fitur Level
@@ -117,5 +117,27 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']);
         });
+    });
+
+    Route::group(['prefix' => 'stok', 'middleware' => 'auth'], function() {
+        Route::get('/', [StokController::class, 'index']);
+        Route::post('/list', [StokController::class, 'list']);
+        
+        // For admin/staff to add and edit stock
+        Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+            Route::get('/create_ajax', [StokController::class, 'create_ajax']);
+            Route::post('/ajax', [StokController::class, 'store_ajax']);
+            Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax']);
+            Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax']);
+        });
+        
+        // For customers to add items to cart
+        Route::post('/add-to-cart', [StokController::class, 'addToCart']);
+    });
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/cart', [StokController::class, 'viewCart']);
+        Route::post('/update-cart', [StokController::class, 'updateCart']);
+        Route::post('/remove-from-cart', [StokController::class, 'removeFromCart']);
     });
 });
