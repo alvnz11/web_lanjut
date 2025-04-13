@@ -41,9 +41,8 @@
       position: relative;
     }
     
-    /* Form container (now on the left) */
     .auth-forms-container {
-      background-color: #ffebee; /* Light red background */
+      background-color: #ffebee; 
       flex: 1;
       position: relative;
       overflow: hidden;
@@ -51,7 +50,6 @@
       padding: 40px;
     }
     
-    /* Image/content container (now on the right) */
     .auth-image {
       background-color: #f9e8d2;
       flex: 1;
@@ -224,7 +222,6 @@
       }
     }
 
-    /* Animation states */
     .slide-to-register .login-form {
       transform: translateX(-100%);
     }
@@ -241,7 +238,6 @@
       transform: translateX(0);
     }
     
-    /* Alert styling */
     .floating-alert {
       position: fixed;
       top: 20px;
@@ -252,12 +248,10 @@
   </style>
 </head>
 <body>
-  <!-- Floating alert container for displaying messages -->
   <div class="floating-alert"></div>
 
   <div class="auth-container">
     <div class="auth-card">
-      <!-- Form container (now on the left with red background) -->
       <div class="auth-forms-container">
         <!-- Login form -->
         <div class="auth-form login-form">
@@ -273,7 +267,7 @@
             </div>
           </div>
           
-          <h1 class="auth-title text-center">Masuk ke Akun Anda</h1>
+          <h1 class="auth-title text-center">Masuk ke Aplikasi</h1>
           
           
           <form action="{{ url('login') }}" method="POST" id="form-login">
@@ -320,10 +314,7 @@
             </div>
           </div>
           
-          <h1 class="auth-title text-center">Buat Akun Baru</h1>
-          {{-- <p class="auth-subtitle">Bergabung dengan komunitas kami dan mulai berjualan sekarang</p> --}}
-          
-          {{-- <div class="separator">Daftar dengan Email</div> --}}
+          <h1 class="auth-title text-center mb-4">Daftar Akun Pelanggan Baru</h1>
           
           <form action="{{ route('register.store') }}" method="POST" id="form-register">
             @csrf
@@ -361,14 +352,12 @@
         </div>
       </div>
       
-      <!-- Image/content container (now on the right) -->
       <div class="auth-image">
         <div class="auth-image-content">
-          <h2 style="font-size: 32px; font-weight: bold; color: #6b2c70; margin-bottom: 20px;">Wujudkan ide Anda menjadi nyata.</h2>
+          <h2 style="font-size: 32px; font-weight: bold; color: #6b2c70; margin-bottom: 20px;">Wujudkan Keinginan Anda menjadi nyata.</h2>
         </div>
         <div class="auth-image-slide">
           <h2 style="font-size: 32px; font-weight: bold; color: #6b2c70; margin-bottom: 20px;">Bergabunglah dengan komunitas kami</h2>
-          {{-- <p style="margin-bottom: 30px;">Mulai berjualan dengan mudah dan cepat</p> --}}
         </div>
       </div>
     </div>
@@ -388,7 +377,6 @@
 
   <script>
     $(document).ready(function() {
-      // Set CSRF token for AJAX requests
       $.ajaxSetup({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -406,7 +394,6 @@
         $('.auth-card').removeClass('slide-to-register');
       });
       
-      // Show any PHP-generated alerts as floating alerts
       @if(session('success'))
         showFloatingAlert('success', 'Berhasil!', "{{ session('success') }}");
       @endif
@@ -419,7 +406,6 @@
         showFloatingAlert('warning', 'Peringatan!', "{!! implode('<br>', $errors->all()) !!}");
       @endif
 
-      // Login form validation and submission
       $("#form-login").validate({
         rules: {
           username: {required: true, minlength: 4, maxlength: 20},
@@ -472,7 +458,6 @@
         }
       });
       
-      // Register form validation
       $("#form-register").validate({
         rules: {
           level_id: {required: true},
@@ -516,7 +501,6 @@
       });
     });
     
-    // Function to show floating alerts
     function showFloatingAlert(icon, title, text) {
       const alertHtml = `
         <div class="alert alert-${icon === 'success' ? 'success' : icon === 'error' ? 'danger' : 'warning'} alert-dismissible fade show">
@@ -528,7 +512,6 @@
       
       $('.floating-alert').html(alertHtml);
       
-      // Auto dismiss after 5 seconds
       setTimeout(function() {
         $('.floating-alert .alert').alert('close');
       }, 5000);

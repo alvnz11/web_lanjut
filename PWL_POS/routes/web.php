@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StokController;
@@ -18,6 +19,13 @@ Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::post('register', [AuthController::class, 'register'])->name('register.store');
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+
+Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect('/dashboard');
+    }
+    return view('welcome');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [WelcomeController::class, 'index']);
@@ -57,6 +65,9 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/{id}/update_ajax', [UserController::class,'update_ajax']);
             Route::get('/{id}/delete_ajax', [UserController::class,'confirm_ajax']);
             Route::delete('/{id}/delete_ajax', [UserController::class,'delete_ajax']);
+            Route::get('/import', [UserController::class, 'import']);
+            Route::post('/import_ajax', [UserController::class, 'import_ajax']);
+            Route::get('/export_template', [UserController::class, 'export_template']);
         });
     });
     

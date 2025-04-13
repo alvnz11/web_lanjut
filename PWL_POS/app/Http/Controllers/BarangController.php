@@ -100,7 +100,6 @@ class BarangController extends Controller
 
     public function update_ajax(Request $request, $id)
     {
-        // cek apakah request dari ajax
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'kategori_id' => ['required', 'integer', 'exists:m_kategori,kategori_id'],
@@ -110,13 +109,12 @@ class BarangController extends Controller
                 'harga_jual' => ['required', 'numeric'],
             ];
 
-            // use Illuminate\Support\Facades\Validator;
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => false, // respon json, true: berhasil, false: gagal
+                    'status' => false, 
                     'message' => 'Validasi gagal.',
-                    'msgField' => $validator->errors() // menunjukkan field mana yang error
+                    'msgField' => $validator->errors() 
                 ]);
             }
 
@@ -147,8 +145,8 @@ class BarangController extends Controller
     {
         if($request->ajax() || $request->wantsJson()){
             $barang = BarangModel::find($id);
-            if($barang){ // jika sudah ditemukan
-                $barang->delete(); // barang di hapus
+            if($barang){ 
+                $barang->delete(); 
                 return response()->json([
                     'status' => true,
                     'message' => 'Data berhasil dihapus'
@@ -172,7 +170,6 @@ class BarangController extends Controller
     {
         if($request->ajax() || $request->wantsJson()){
             $rules = [
-                // validasi file harus xls atau xlsx, max 1MB
                 'file_barang' => ['required', 'mimes:xlsx', 'max:1024']
             ];
 
@@ -185,18 +182,18 @@ class BarangController extends Controller
                 ]);
             }
 
-            $file = $request->file('file_barang'); // ambil file dari request
-            $reader = IOFactory::createReader('Xlsx'); // load reader file excel
-            $reader->setReadDataOnly(true); // hanya membaca data
-            $spreadsheet = $reader->load($file->getRealPath()); // load file excel
-            $sheet = $spreadsheet->getActiveSheet(); // ambil sheet yang aktif
+            $file = $request->file('file_barang'); 
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true); 
+            $spreadsheet = $reader->load($file->getRealPath()); 
+            $sheet = $spreadsheet->getActiveSheet(); 
 
-            $data = $sheet->toArray(null, false, true, true); // ambil data excel
+            $data = $sheet->toArray(null, false, true, true); 
 
             $insert = [];
-            if(count($data) > 1){ // jika data lebih dari 1 baris
+            if(count($data) > 1){ 
                 foreach ($data as $baris => $value) {
-                    if($baris > 1){ // baris ke 1 adalah header, maka lewati
+                    if($baris > 1){
                         $insert[] = [
                             'kategori_id' => $value['A'],
                             'barang_kode' => $value['B'],
@@ -210,7 +207,6 @@ class BarangController extends Controller
             }
 
             if(count($insert) > 0){
-                // insert data ke database, jika data sudah ada, maka diabaikan
                 BarangModel::insertOrIgnore($insert);
 
                 return response()->json([
@@ -228,15 +224,13 @@ class BarangController extends Controller
     }
 
     public function export_excel(){
-        // 1. ambil data barang yang akan di export
         $barang = BarangModel::select('kategori_id','barang_kode','barang_nama','harga_beli','harga_jual')
                     ->orderBy('kategori_id')
                     ->with('kategori')
                     ->get();
         
-        // 2. load library excel
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet(); // ambil sheet yang aktif
+        $sheet = $spreadsheet->getActiveSheet(); 
 
         $sheet->setCellValue('A1', 'No');
         $sheet->setCellValue('B1', 'Kode Barang');
@@ -245,11 +239,10 @@ class BarangController extends Controller
         $sheet->setCellValue('E1', 'Harga Jual');
         $sheet->setCellValue('F1', 'Kategori');
 
-        $sheet->getStyle('A1:F1')->getFont()->setBold(true); //bold header
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true); 
 
-        // 3.
-        $no = 1; //nomor data dimulai dari 1
-        $baris = 2; //baris data dimulai dari baris ke 2
+        $no = 1; 
+        $baris = 2;
 
         foreach ($barang as $key => $value) {
             $sheet->setCellValue('A'.$baris, $no);
@@ -257,18 +250,18 @@ class BarangController extends Controller
             $sheet->setCellValue('C'.$baris, $value->barang_nama);
             $sheet->setCellValue('D'.$baris, $value->harga_beli);
             $sheet->setCellValue('E'.$baris, $value->harga_jual);
-            $sheet->setCellValue('F'.$baris, $value->kategori->kategori_nama); //ambil nama kategori
+            $sheet->setCellValue('F'.$baris, $value->kategori->kategori_nama); 
             $baris++;
             $no++;
         }
 
         // 4.
         foreach(range('A','F') as $columnID){
-            $sheet->getColumnDimension($columnID)->setAutoSize(true); // set auto size untuk kolom
+            $sheet->getColumnDimension($columnID)->setAutoSize(true); 
         }
 
         // 5.
-        $sheet->setTitle('Data Barang'); // set title sheet
+        $sheet->setTitle('Data Barang'); 
         
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $filename = 'Data Barang '.date('Y-m-d H:i:s').'.xlsx';

@@ -30,10 +30,10 @@
                         <div class="profile-photo-container mb-3">
                             <div id="preview-container">
                                 @if($user->path_foto)
-                                    <img id="preview-image" src="{{ asset('storage/'.$user->path_foto) }}" alt="Foto Profil" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                                @else
-                                    <img id="preview-image" src="{{ asset('images/default-avatar.png') }}" alt="Foto Profil" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                                @endif
+                                <img id="preview-image" src="{{ asset('storage/'.$user->path_foto) }}" alt="Foto Profil" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                            @else
+                                <img id="preview-image" src="{{ asset('images/default-avatar.png') }}" alt="Foto Profil" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                            @endif
                             </div>
                             <div class="mt-2">
                                 <label for="foto_profil" class="btn btn-sm btn-outline-secondary">

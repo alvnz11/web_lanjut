@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserModel;
+use App\Models\LevelModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\Facades\DataTables;
-use App\Models\LevelModel;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -355,5 +356,110 @@ class UserController extends Controller
         }
 
         return redirect('/');
+    }
+
+
+    public function import()
+    {
+        return view('user.import');
+    }
+
+    public function import_ajax(Request $request)
+    {
+        if($request->ajax() || $request->wantsJson()){
+            $rules = [
+                'file_user' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if($validator->fails()){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            $file = $request->file('file_user'); 
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true); 
+            $spreadsheet = $reader->load($file->getRealPath()); 
+            $sheet = $spreadsheet->getActiveSheet(); 
+
+            $data = $sheet->toArray(null, false, true, true); 
+
+            $insert = [];
+            if(count($data) > 1){ 
+                foreach ($data as $baris => $value) {
+                    if($baris > 1){ 
+                        $existingUser = UserModel::where('username', $value['B'])->first();
+                        if (!$existingUser) {
+                            $insert[] = [
+                                'level_id' => $value['A'],
+                                'username' => $value['B'],
+                                'nama' => $value['C'],
+                                'password' => bcrypt($value['D']), 
+                                'created_at' => now(),
+                            ];
+                        }
+                    }
+                }
+            }
+
+            if(count($insert) > 0){
+                UserModel::insert($insert);
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diimport'
+                ]);
+            }else{
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Tidak ada data yang diimport'
+                ]);
+            }
+        }
+        return redirect('/');
+    }
+
+    public function export_template()
+    {
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        
+        $sheet->setCellValue('A1', 'Level ID');
+        $sheet->setCellValue('B1', 'Username');
+        $sheet->setCellValue('C1', 'Nama');
+        $sheet->setCellValue('D1', 'Password');
+        
+        $sheet->getStyle('A1:D1')->getFont()->setBold(true);
+        
+        foreach(range('A','D') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+        
+        $sheet->setCellValue('A2', '1');
+        $sheet->setCellValue('B2', 'user123');
+        $sheet->setCellValue('C2', 'Nama User');
+        $sheet->setCellValue('D2', 'password123');
+        
+        $sheet->getComment('A1')->getText()->createTextRun('ID Level: Admin = 1, Operator = 2, dll.');
+        
+        $sheet->setTitle('Template User');
+        
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Template_User.xlsx';
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified: '. gmdate('D, d M Y H:i:s'). ' GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+        
+        $writer->save('php://output');
+        exit;
     }
 }
