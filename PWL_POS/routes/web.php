@@ -128,6 +128,9 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/{id}/update_ajax', [SupplierController::class, 'update_ajax']);
             Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']);
             Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']);
+            Route::get('/import', [SupplierController::class, 'import']);
+            Route::post('/import_ajax', [SupplierController::class, 'import_ajax']);
+            Route::get('/export_template', [SupplierController::class, 'export_template']);
         });
     });
 
@@ -135,15 +138,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [StokController::class, 'index']);
         Route::post('/list', [StokController::class, 'list']);
         
-        // For admin/staff to add and edit stock
         Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
             Route::get('/create_ajax', [StokController::class, 'create_ajax']);
             Route::post('/ajax', [StokController::class, 'store_ajax']);
             Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax']);
             Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax']);
+            Route::get('/export_pdf', [StokController::class, 'export_pdf']);
         });
         
-        // For customers to add items to cart
         Route::post('/add-to-cart', [StokController::class, 'addToCart']);
     });
 
@@ -155,12 +157,11 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/penjualan', [PenjualanController::class, 'index']);
     Route::get('/penjualan/{id}', [PenjualanController::class, 'show']);
+    Route::get('/penjualan/export_pdf', [PenjualanController::class, 'export_pdf']);
     
-    // Customer checkout
     Route::get('/checkout', [PenjualanController::class, 'checkout']);
     Route::post('/checkout/process', [PenjualanController::class, 'process']);
     
-    // Admin/Staff routes
     Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
         Route::post('/penjualan/list', [PenjualanController::class, 'list']);
         Route::get('/penjualan/create', [PenjualanController::class, 'create']);

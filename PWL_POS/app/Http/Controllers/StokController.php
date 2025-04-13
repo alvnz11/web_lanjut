@@ -12,7 +12,6 @@ class StokController extends Controller
 {
     public function index()
     {
-        // Check if user is customer or staff/admin/manager
         if (Auth::user()->level->level_kode == 'CUS') {
             return $this->customerStokView();
         } else {
@@ -58,7 +57,6 @@ class StokController extends Controller
     {
         $query = StokModel::with(['barang', 'user']);
         
-        // Apply filter if provided
         if ($request->filter_barang) {
             $query->where('barang_id', $request->filter_barang);
         }
@@ -91,7 +89,6 @@ class StokController extends Controller
                 'stok_jumlah' => 'required|numeric|min:1',
             ]);
             
-            // Create new stock record
             StokModel::create([
                 'barang_id' => $request->barang_id,
                 'user_id' => Auth::id(),
@@ -149,7 +146,6 @@ class StokController extends Controller
         }
     }
 
-    // Method for customer to add item to cart
     public function addToCart(Request $request)
     {
         try {
@@ -158,7 +154,6 @@ class StokController extends Controller
                 'quantity' => 'required|numeric|min:1'
             ]);
             
-            // Check if product is in stock
             $barang = BarangModel::findOrFail($request->barang_id);
             $availableStock = StokModel::where('barang_id', $request->barang_id)
                 ->sum('stok_jumlah');
@@ -167,7 +162,6 @@ class StokController extends Controller
                 return redirect()->back()->with('error', 'Stok tidak mencukupi');
             }
             
-            // Add to cart (we'll use session for now)
             $cart = session()->get('cart', []);
             
             if (isset($cart[$request->barang_id])) {
@@ -189,7 +183,6 @@ class StokController extends Controller
         }
     }
 
-    // View cart contents
     public function viewCart()
     {
         $breadcrumb = (object) [
@@ -201,6 +194,29 @@ class StokController extends Controller
             'breadcrumb' => $breadcrumb, 
             'activeMenu' => $activeMenu,
         ]);
-        // return view('stok.cart');
+    }
+
+    public function export_pdf()
+    {
+        ini_set('max_execution_time', 300);
+
+        $stok = StokModel::with(['barang.kategori', 'user'])
+                    ->orderBy('stok_tanggal', 'desc')
+                    ->get();
+
+        $imagePath = public_path('/images/polinema.png');
+        $imageData = base64_encode(file_get_contents($imagePath));
+        $imageSrc = 'data:image/png;base64,' . $imageData;
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('stok.export_pdf', [
+            'stok' => $stok,
+            'logoSrc' => $imageSrc
+        ]);
+        
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Stok '.date('Y-m-d H:i:s').'.pdf');
     }
 }

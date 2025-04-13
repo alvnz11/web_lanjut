@@ -5,6 +5,7 @@
     <div class="card-header">
         <h3 class="card-title">Daftar Penjualan</h3>
         <div class="card-tools">
+            <a href="{{ url('/penjualan/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export PDF</a>
             <a href="{{ url('/penjualan/create') }}" class="btn btn-success">Tambah Penjualan</a>
         </div>
     </div>

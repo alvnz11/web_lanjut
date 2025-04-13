@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SupplierModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use App\Models\SupplierModel;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Validator;
 
 
 class SupplierController extends Controller
@@ -250,5 +251,106 @@ class SupplierController extends Controller
         }
 
         return redirect('/');
+    }
+
+    public function import()
+    {
+        return view('supplier.import');
+    }
+
+    public function import_ajax(Request $request)
+    {
+        if($request->ajax() || $request->wantsJson()){
+            $rules = [
+                'file_supplier' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if($validator->fails()){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+
+            $file = $request->file('file_supplier'); 
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(true); 
+            $spreadsheet = $reader->load($file->getRealPath()); 
+            $sheet = $spreadsheet->getActiveSheet(); 
+
+            $data = $sheet->toArray(null, false, true, true); 
+
+            $insert = [];
+            if(count($data) > 1){ 
+                foreach ($data as $baris => $value) {
+                    if($baris > 1){ 
+                        $existingSupplier = SupplierModel::where('supplier_kode', $value['A'])->first();
+                        if (!$existingSupplier) {
+                            $insert[] = [
+                                'supplier_kode' => $value['A'],
+                                'supplier_nama' => $value['B'],
+                                'supplier_alamat' => $value['C'],
+                                'created_at' => now(),
+                            ];
+                        }
+                    }
+                }
+            }
+
+            if(count($insert) > 0){
+                SupplierModel::insert($insert);
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diimport'
+                ]);
+            }else{
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Tidak ada data yang diimport'
+                ]);
+            }
+        }
+        return redirect('/');
+    }
+
+    public function export_template()
+    {
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        
+        $sheet->setCellValue('A1', 'Kode Supplier');
+        $sheet->setCellValue('B1', 'Nama Supplier');
+        $sheet->setCellValue('C1', 'Alamat');
+        
+        $sheet->getStyle('A1:C1')->getFont()->setBold(true);
+        
+        foreach(range('A','C') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+        
+        $sheet->setCellValue('A2', 'SUP001');
+        $sheet->setCellValue('B2', 'PT Supplier Utama');
+        $sheet->setCellValue('C2', 'Jl. Supplier No. 123, Jakarta');
+        
+        $sheet->getComment('A1')->getText()->createTextRun('Kode supplier max 10 karakter.');
+        
+        $sheet->setTitle('Template Supplier');
+        
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Template_Supplier.xlsx';
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified: '. gmdate('D, d M Y H:i:s'). ' GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+        
+        $writer->save('php://output');
+        exit;
     }
 }

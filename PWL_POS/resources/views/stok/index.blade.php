@@ -5,6 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">Daftar Stok Barang</h3>
             <div class="card-tools">
+                <a href="{{ url('/stok/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export PDF</a>
                 <button onclick="modalAction('{{ url('/stok/create_ajax') }}')" class="btn btn-success">Tambah Stok</button>
             </div>
         </div>

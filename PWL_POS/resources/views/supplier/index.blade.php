@@ -5,7 +5,7 @@
       <div class="card-header"> 
         <h3 class="card-title">{{ $page->title }}</h3> 
         <div class="card-tools"> 
-          <a class="btn btn-sm btn-primary mt-1" href="{{ url('supplier/create') }}">Tambah</a>
+          <button onclick="modalAction('{{ url('supplier/import') }}')" class="btn btn-sm btn-info mt-1"><i class="fa fa-file-import"></i> Import Supplier</button>
           <button onclick="modalAction('{{ url('supplier/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
         </div> 
       </div> 
@@ -59,8 +59,9 @@
         }); 
     }
     
+    var dataSupplier;
     $(document).ready(function() {
-        var dataSupplier = $('#table_supplier').DataTable({
+        dataSupplier = $('#table_supplier').DataTable({
             serverSide: true,
             ajax: {
                 "url": "{{ url('supplier/list') }}",

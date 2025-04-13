@@ -15,7 +15,6 @@ class PenjualanController extends Controller
 {
     public function index()
     {
-        // Check if user is customer or admin/manager/staff
         if (Auth::user()->level->level_kode == 'CUS') {
             return $this->customerPenjualanView();
         } else {
@@ -37,7 +36,6 @@ class PenjualanController extends Controller
 
     private function customerPenjualanView()
     {
-        // Get customer's orders
         $penjualan = PenjualanModel::with('detail')
             ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
@@ -90,7 +88,6 @@ class PenjualanController extends Controller
     {
         $penjualan = PenjualanModel::with(['user', 'detail.barang'])->findOrFail($id);
         
-        // Check if user is authorized to view this order
         if (Auth::user()->level->level_nama == 'CST' && $penjualan->user_id != Auth::id()) {
             return redirect('/penjualan')->with('error', 'Anda tidak berhak melihat data ini');
         }
@@ -104,7 +101,6 @@ class PenjualanController extends Controller
         return view('penjualan.show', compact('breadcrumb', 'activeMenu', 'penjualan'));
     }
 
-    // Checkout method for customers to create a new order from cart
     public function checkout()
     {
         $cart = session('cart', []);
@@ -122,7 +118,6 @@ class PenjualanController extends Controller
         return view('penjualan.checkout', compact('breadcrumb', 'activeMenu', 'cart'));
     }
 
-    // Process the order after checkout
     public function process(Request $request)
     {
         $cart = session('cart', []);
@@ -142,18 +137,15 @@ class PenjualanController extends Controller
                 'penjualan_tanggal' => now()
             ]);
             
-            // Create penjualan details and update stock
             foreach ($cart as $id => $item) {
                 $barang = BarangModel::findOrFail($id);
                 
-                // Check stock availability
                 $stockAvailable = StokModel::where('barang_id', $id)->sum('stok_jumlah');
                 
                 if ($stockAvailable < $item['quantity']) {
                     throw new \Exception('Stok tidak mencukupi untuk produk: ' . $barang->barang_nama);
                 }
                 
-                // Create detail record
                 PenjualanDetailModel::create([
                     'penjualan_id' => $penjualan->penjualan_id,
                     'barang_id' => $id,
@@ -161,7 +153,6 @@ class PenjualanController extends Controller
                     'jumlah' => $item['quantity']
                 ]);
                 
-                // Reduce stock (creating a negative stock entry)
                 StokModel::create([
                     'barang_id' => $id,
                     'user_id' => Auth::id(),
@@ -170,7 +161,6 @@ class PenjualanController extends Controller
                 ]);
             }
             
-            // Clear the cart
             session()->forget('cart');
             
             DB::commit();
@@ -182,7 +172,6 @@ class PenjualanController extends Controller
         }
     }
 
-    // For admin to create a new transaction
     public function create()
     {
         $barang = BarangModel::with(['kategori', 'stok'])->get();
@@ -195,7 +184,6 @@ class PenjualanController extends Controller
         return view('penjualan.create', compact('breadcrumb', 'activeMenu', 'barang'));
     }
 
-    // For admin to store a new transaction
     public function store(Request $request)
     {
         $request->validate([
@@ -209,28 +197,24 @@ class PenjualanController extends Controller
         try {
             DB::beginTransaction();
             
-            // Create penjualan header
-            $penjualanKode = 'TRX-' . date('YmdHis') . '-' . Auth::id();
+            $penjualanKode = 'TX' . date('ymd') . Auth::id() . substr(uniqid(), -4);
             $penjualan = PenjualanModel::create([
                 'user_id' => Auth::id(),
-                'pembeli' => $request->pembeli,
+                'pembeli' => Auth::user()->nama,
                 'penjualan_kode' => $penjualanKode,
                 'penjualan_tanggal' => now()
             ]);
             
-            // Create penjualan details and update stock
             foreach ($request->barang_id as $key => $barangId) {
                 $barang = BarangModel::findOrFail($barangId);
                 $jumlah = $request->jumlah[$key];
                 
-                // Check stock availability
                 $stockAvailable = StokModel::where('barang_id', $barangId)->sum('stok_jumlah');
                 
                 if ($stockAvailable < $jumlah) {
                     throw new \Exception('Stok tidak mencukupi untuk produk: ' . $barang->barang_nama);
                 }
                 
-                // Create detail record
                 PenjualanDetailModel::create([
                     'penjualan_id' => $penjualan->penjualan_id,
                     'barang_id' => $barangId,
@@ -238,7 +222,6 @@ class PenjualanController extends Controller
                     'jumlah' => $jumlah
                 ]);
                 
-                // Reduce stock (creating a negative stock entry)
                 StokModel::create([
                     'barang_id' => $barangId,
                     'user_id' => Auth::id(),
@@ -254,5 +237,38 @@ class PenjualanController extends Controller
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal membuat penjualan: ' . $e->getMessage());
         }
+    }
+
+    public function export_pdf()
+    {
+        ini_set('max_execution_time', 300);
+
+        $penjualan = PenjualanModel::with(['user', 'detail.barang'])
+                    ->orderBy('penjualan_tanggal', 'desc')
+                    ->get();
+
+        $penjualan->map(function($item) {
+            $total = 0;
+            foreach ($item->detail as $detail) {
+                $total += $detail->harga * $detail->jumlah;
+            }
+            $item->total_penjualan = $total;
+            return $item;
+        });
+
+        $imagePath = public_path('/images/polinema.png');
+        $imageData = base64_encode(file_get_contents($imagePath));
+        $imageSrc = 'data:image/png;base64,' . $imageData;
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('penjualan.export_pdf', [
+            'penjualan' => $penjualan,
+            'logoSrc' => $imageSrc
+        ]);
+        
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption("isRemoteEnabled", true);
+        $pdf->render();
+
+        return $pdf->stream('Data Penjualan '.date('Y-m-d H:i:s').'.pdf');
     }
 }
