@@ -10,6 +10,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\PenjualanController;
 
 Route::pattern('id', '[0-9]+');
 
@@ -139,5 +140,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/cart', [StokController::class, 'viewCart']);
         Route::post('/update-cart', [StokController::class, 'updateCart']);
         Route::post('/remove-from-cart', [StokController::class, 'removeFromCart']);
+    });
+    
+    Route::get('/penjualan', [PenjualanController::class, 'index']);
+    Route::get('/penjualan/{id}', [PenjualanController::class, 'show']);
+    
+    // Customer checkout
+    Route::get('/checkout', [PenjualanController::class, 'checkout']);
+    Route::post('/checkout/process', [PenjualanController::class, 'process']);
+    
+    // Admin/Staff routes
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::post('/penjualan/list', [PenjualanController::class, 'list']);
+        Route::get('/penjualan/create', [PenjualanController::class, 'create']);
+        Route::post('/penjualan', [PenjualanController::class, 'store']);
     });
 });
