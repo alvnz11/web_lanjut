@@ -89,7 +89,21 @@ $(document).ready(function(){
             className: "",
             width: "15%",
             orderable: true,
-            searchable: true
+            searchable: true,
+            render: function(data, type, row) {
+                if (type === 'display' || type === 'filter') {
+                    const namaBulan = [
+                        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                    ];
+                    const tanggal = data.substring(0, 10);
+                    const parts = tanggal.split('-');
+                    const namaBulanIndex = parseInt(parts[1]) - 1;
+                    const namaBulanText = namaBulan[namaBulanIndex];
+                    return parts[2] + ' ' + namaBulanText +  ' ' + parts[0];
+                }
+                return data;
+            }
         },{
             data: "barang.barang_kode",
             className: "",

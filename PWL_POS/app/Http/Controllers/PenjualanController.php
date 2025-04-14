@@ -57,7 +57,7 @@ class PenjualanController extends Controller
         return datatables()->of($query)
             ->addIndexColumn()
             ->addColumn('tanggal', function($data) {
-                return Carbon::parse($data->penjualan_tanggal)->format('d/m/Y');
+            return Carbon::parse($data->penjualan_tanggal)->format('j M Y');
             })
             ->addColumn('total', function($data) {
                 return 'Rp ' . number_format($this->calculateTotal($data->penjualan_id), 0, ',', '.');

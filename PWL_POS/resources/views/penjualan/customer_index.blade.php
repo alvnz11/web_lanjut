@@ -34,7 +34,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $p->penjualan_kode }}</td>
-                            <td>{{ \Carbon\Carbon::parse($p->penjualan_tanggal)->format('d/m/Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($p->penjualan_tanggal)->format('j M Y') }}</td>
                             <td>{{ $p->detail->sum('jumlah') }} item</td>
                             <td class="text-right">
                                 Rp {{ number_format($p->detail->sum(function($detail) {
