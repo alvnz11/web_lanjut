@@ -74,3 +74,30 @@
     - Uji coba dengan token yang didapat saat login di percobaan sebelumnya
 
         ![alt text](image-6.png)
+
+
+## Praktikum 4 - Implementasi CRUD dalam RESTful API
+
+### Langkah-langkah:
+1. **Membuat controller di `controller/Api/LevelController`**
+2. **Menambah route baru di `api.php`**
+3. **Hasil**
+    - Mengembalikan data level yang ada di database dalam format JSON menggunakan route /levels
+
+        ![alt text](image-7.png)
+
+    - Menambahkan data ke dalam database
+
+        ![alt text](image-8.png)
+
+    - Menampilkan detail data dengan level_id = 9 
+
+        ![alt text](image-9.png)
+
+    - Mengubah level_kode pada level_id 9 dengan menggunakan parameter 
+
+        ![alt text](image-10.png)
+
+    - Menghapus data dengan level_id = 9 
+
+        ![alt text](image-11.png)
