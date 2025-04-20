@@ -24,14 +24,14 @@
     ```
     php artisan jwt:secret
     ```
-3. **Membuat secret key**
+4. **Membuat secret key**
     ```
     php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
     ```
-4. **Memodifikasi `config/auth.php`**
-4. **Menambah kode di `UserModel.php`**
-4. **Membuat controller di `controller/Api/RegisterController`**
-7. **Hasil**
+5. **Memodifikasi `config/auth.php`**
+6. **Menambah kode di `UserModel.php`**
+7. **Membuat controller di `controller/Api/RegisterController`**
+8. **Hasil**
     - Uji coba tanpa data
 
         ![alt text](image.png)
@@ -39,3 +39,26 @@
     - Uji coba dengan data
 
         ![alt text](image-1.png)
+
+
+## Praktikum 2 - Membuat RESTful API Login
+
+### Langkah-langkah:
+1. **Membuat controller di `controller/Api/LoginController`**
+1. **Menambah route baru di `api.php`**
+7. **Hasil**
+    - Uji coba tanpa data
+
+        ![alt text](image-2.png)
+
+    - Uji coba dengan data
+
+        ![alt text](image-3.png)
+
+    - Uji coba dengan data yang salah
+
+        ![alt text](image-4.png)
+
+    - Uji coba dengan menggunakan method get di route /user dengan menggunakan token di uji coba sebelumnya
+
+        ![alt text](image-5.png)
