@@ -163,6 +163,7 @@ class BarangController extends Controller
 
     public function import()
     {
+        
         return view('barang.import');
     }
 

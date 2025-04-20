@@ -18,4 +18,5 @@ Kelas   : TI-2A
 | Pertemuan 7 (Authentication dan Authorization di Laravel) | [Week 7](https://github.com/alvnz11/web_lanjut/tree/main/minggu7) |
 | Pertemuan 8 (File Import dan Export ke PDF dan Excel pada Laravel) | [Week 8](https://github.com/alvnz11/web_lanjut/tree/main/minggu8) |
 | UTS (Implementasi PWL_POS) | [UTS](https://github.com/alvnz11/web_lanjut/tree/main/PWL_POS) |
+| Pertemuan 9 (RESTFUL API) | [Week 9](https://github.com/alvnz11/web_lanjut/tree/main/minggu9) |
 ---
